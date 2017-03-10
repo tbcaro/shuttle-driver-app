@@ -10,9 +10,36 @@
   <link rel="stylesheet" href="/css/menu.css"/>
 </head>
 <body>
-  <h1>Menu Page</h1>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center h1">Menu</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 p-3">
+          <button class="btn btn-block btn-primary p-5">
+            Go into service
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 p-3">
+          <button class="btn btn-block btn-secondary p-5">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div th:replace="fragments/scripts"></div>
   <script src="/js/menu.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new MenuApp();
+    });
+  </script>
 </body>
 </html>

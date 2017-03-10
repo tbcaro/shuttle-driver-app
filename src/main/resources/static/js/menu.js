@@ -1,3 +1,16 @@
-/**
- * Created by Travis on 3/10/17.
- */
+function MenuApp() {
+  var self = this;
+
+  var elements = { };
+
+  self.initialize = function() {
+    // TBC : Setup elements
+  };
+
+  var bindEventHandlers = function() {
+
+  };
+
+  self.initialize();
+  return self;
+}

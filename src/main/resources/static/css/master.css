@@ -1,0 +1,19 @@
+html, body {
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  color: #736e70;
+  box-sizing: border-box;
+  overflow: hidden;
+  /*font-family: 'Shadows Into Light', cursive;*/
+}
+
+i {
+  color: black;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+}
