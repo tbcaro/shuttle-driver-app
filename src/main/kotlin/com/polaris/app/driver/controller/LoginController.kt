@@ -1,6 +1,7 @@
 package com.polaris.app.driver.controller
 
 import com.polaris.app.driver.controller.adapter.LoginAdapter
+import com.polaris.app.driver.controller.exception.AuthenticationException
 import com.polaris.app.driver.service.AuthenticationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -48,8 +49,9 @@ class LoginController(private val authService: AuthenticationService) {
         if (authService.isAuthenticated(http)) {
             return "redirect:/menu"
         } else {
-            attributes.addFlashAttribute("error", "login failed: service code, username, password combination invalid")
-            return "redirect:/loginForm"
+            throw AuthenticationException("login failed: service code, username, password combination invalid")
+//            attributes.addFlashAttribute("error", "login failed: service code, username, password combination invalid")
+//            return "redirect:/loginForm"
         }
     }
 
