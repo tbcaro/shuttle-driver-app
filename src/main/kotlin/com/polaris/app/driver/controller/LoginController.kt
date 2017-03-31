@@ -15,10 +15,6 @@ import javax.servlet.http.HttpSession
 @Controller
 class LoginController(private val authService: AuthenticationService) {
 
-    val TEST_SERVICE_CODE = "servicecode1"
-    val TEST_USER = "username1"
-    val TEST_PASSWORD = "password1"
-
     @RequestMapping("/")
     fun root(model: Model) : String {
         return "redirect:/loginForm"
