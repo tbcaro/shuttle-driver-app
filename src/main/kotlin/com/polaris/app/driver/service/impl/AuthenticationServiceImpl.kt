@@ -1,8 +1,11 @@
 package com.polaris.app.driver.service.impl
 
+import com.polaris.app.driver.controller.exception.AuthenticationException
 import com.polaris.app.driver.repository.UserRepository
+import com.polaris.app.driver.repository.UserType
 import com.polaris.app.driver.service.AuthenticationService
 import com.polaris.app.driver.service.bo.UserContext
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 
@@ -12,10 +15,24 @@ class AuthenticationServiceImpl(val userRepository: UserRepository) : Authentica
     val USER_ID = "userId"
     val USERNAME = "username"
 
-    override fun authenticate(servicecode: String, username: String, password: String) {
-        // TBC : TODO : Find user by servicecode, username, password combo
-            // TBC : TODO : If valid user, generate session
-            // TBC : TODO : Else, throw exception
+    override fun authenticate(http: HttpServletRequest, username: String, password: String, servicecode: String) {
+        val users = userRepository.findUserByLogin(username, password, servicecode)
+        if (users.isEmpty()) {
+            throw AuthenticationException("Authentication failed: invalid username, password, or servicecode")
+        } else if (users.size > 1) {
+            throw AuthenticationException("Authentication failed: more than one user for this combo. Please contact your administrator.")
+        } else {
+            val user = users[0]
+            if (user.userType == UserType.DRIVER) {
+                val sessionAttributes = HashMap<String, Any>()
+                sessionAttributes.put(SERVICE_ID, user.serviceId)
+                sessionAttributes.put(SERVICE_CODE, servicecode)
+                sessionAttributes.put(USER_ID, user.id)
+                sessionAttributes.put(USERNAME, user.userName)
+
+                this.generateSession(http, sessionAttributes)
+            }
+        }
     }
 
     override fun isAuthenticated(http: HttpServletRequest): Boolean {

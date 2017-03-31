@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest
 
 
 interface AuthenticationService {
-    fun authenticate(servicecode: String, username: String, password: String)
+    fun authenticate(http: HttpServletRequest, username: String, password: String, servicecode: String)
     fun isAuthenticated(http: HttpServletRequest) : Boolean
     fun generateSession(http: HttpServletRequest, attributes: Map<String, Any>)
     fun invalidateSession(http: HttpServletRequest)

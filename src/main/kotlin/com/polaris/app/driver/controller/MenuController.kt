@@ -12,6 +12,12 @@ class MenuController(private val authService: AuthenticationService) {
 
     @RequestMapping("/menu")
     fun menu(model: Model, http: HttpServletRequest) : String {
-        if (authService.isAuthenticated(http)) return "menu" else throw AuthenticationException("Error: user logged out")
+        if (authService.isAuthenticated(http)) {
+            val userContext = authService.getUserContext(http)
+            model.addAttribute("username", userContext.username)
+            return "menu"
+        } else {
+            throw AuthenticationException("Error: user logged out")
+        }
     }
 }

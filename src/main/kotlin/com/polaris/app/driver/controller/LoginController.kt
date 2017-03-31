@@ -34,15 +34,8 @@ class LoginController(private val authService: AuthenticationService) {
     fun login(attributes: RedirectAttributes, http: HttpServletRequest, loginAdapter: LoginAdapter) : String {
 
         loginAdapter.let {
-            if (it.servicecode == TEST_SERVICE_CODE &&
-                it.username == TEST_USER &&
-                it.password == TEST_PASSWORD
-            ) {
-                val sessionAttributes = HashMap<String, Any>()
-                sessionAttributes.put("serviceCode", TEST_SERVICE_CODE)
-                sessionAttributes.put("username", TEST_USER)
-
-                authService.generateSession(http, sessionAttributes)
+            if (it.username != null && it.password != null && it.servicecode != null) {
+                authService.authenticate(http, it.username!!, it.password!!, it.servicecode!!)
             }
         }
 
@@ -50,8 +43,6 @@ class LoginController(private val authService: AuthenticationService) {
             return "redirect:/menu"
         } else {
             throw AuthenticationException("login failed: service code, username, password combination invalid")
-//            attributes.addFlashAttribute("error", "login failed: service code, username, password combination invalid")
-//            return "redirect:/loginForm"
         }
     }
 
