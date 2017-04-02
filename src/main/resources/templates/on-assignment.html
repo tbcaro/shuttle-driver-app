@@ -14,14 +14,14 @@
     <div class="container-fluid">
       <div id="btn-end-assignment-container" class="row">
         <div class="col">
-          <div class="p-1">
-            <a class="btn btn-sm btn-warning" href="/end-assignment">End Assignment</a>
+          <div class="pt-1">
+            <a class="btn btn-sm btn-secondary" href="/end-assignment">End Assignment</a>
           </div>
         </div>
       </div>
       <div id="btn-finish-assignment-container" class="row" style="display: none;">
         <div class="col text-center">
-          <div class="p-1">
+          <div class="pt-1">
             <a class="btn btn-primary" href="/end-assignment">Complete Assignment</a>
           </div>
         </div>
@@ -33,24 +33,70 @@
       </div>
       <div class="row">
         <div class="col text-center">
-          <label id="status-label" class="btn btn-sm btn-success">Driving</label>
-          <span id="status-preposition">to</span>
-          <label class="btn btn-sm btn-secondary"><i class="fa fa-map-pin"></i><span id="status-stop">Baseball Stadium</span></label>
+          <div>
+            <label id="status-label" class="btn btn-success mb-1">Driving</label>
+          </div>
+          <div id="status-preposition">
+            to
+          </div>
+          <div>
+            <label id="current-stop-status" class="btn btn-secondary mt-1"><i class="fa fa-map-pin"></i> <span id="status-stop">Baseball Stadium asdfsafafasfdsaffasf</span></label>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <h3>Assignment Info</h3>
+          <div id="assignment-card" class="card p-1">
+            <div class="row">
+              <div class="col-6">
+                Route:
+              </div>
+              <div id="route-name-container" class="col-6 text-right">
+                Downtown Loop
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div id="stop-card" class="card p-1">
+                  <div class="row">
+                    <div id="current-stop-container" class="col-12 text-center">
+                      <i class="fa fa-map-pin"></i>
+                      Baseball Stadium
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 text-right">
+                      Arrive:
+                    </div>
+                    <div id="est-stop-arrive" class="col-6">
+                      5:00 PM
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 text-right">
+                      Depart:
+                    </div>
+                    <div id="est-stop-depart" class="col-6">
+                      5:30 PM
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <h3>Prev/Next Buttons</h3>
+      <div class="row pt-2">
+        <div class="col-6 text-center pr-0">
+          <button id="btn-prev" class="btn btn-lg btn-secondary">Prev</button>
+        </div>
+        <div class="col-6 text-center pl-0">
+          <button id="btn-next" class="btn btn-lg btn-secondary">Next</button>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <h3>Driving/At-Stop Button</h3>
+      <div class="row pt-2">
+        <div class="col-12 text-center">
+          <button id="btn-change-status" class="btn btn-lg btn-warning p-4">Stop at Baseball Stadium</button>
         </div>
       </div>
     </div>

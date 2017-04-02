@@ -1,0 +1,24 @@
+.btn {
+  cursor: pointer;
+}
+
+.card {
+  background: #f8f8f8;
+}
+#current-stop-status {
+  white-space: normal;
+}
+
+#current-stop-container {
+  font-size: 12pt;
+}
+
+#stop-card {
+  background: #f8f8f8;
+  font-size: 10pt;
+  width: 100%;
+}
+
+#btn-prev, #btn-next, #btn-change-status {
+  width: 100%;
+}
