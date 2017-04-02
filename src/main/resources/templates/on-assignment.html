@@ -7,15 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
   <div th:replace="fragments/styles"></div>
-  <link rel="stylesheet" href="/css/select-assignment.css"/>
+  <link rel="stylesheet" href="/css/on-assignment.css"/>
 </head>
 <body>
   <div id="main" class="align-self-stretch">
     <div class="container-fluid">
-      <div class="row">
+      <div id="btn-end-assignment-container" class="row">
         <div class="col">
           <div class="p-1">
-            <a id="btn-deactivate" class="btn btn-warning" href="/deactivate">End Service</a>
+            <a class="btn btn-sm btn-warning" href="/end-assignment">End Assignment</a>
+          </div>
+        </div>
+      </div>
+      <div id="btn-finish-assignment-container" class="row" style="display: none;">
+        <div class="col text-center">
+          <div class="p-1">
+            <a class="btn btn-primary" href="/end-assignment">Complete Assignment</a>
           </div>
         </div>
       </div>
@@ -23,8 +30,12 @@
         <div class="col">
           <label>Status:</label>
         </div>
-        <div class="col text-right">
-          <label class="btn btn-sm btn-info">Active</label>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <label id="status-label" class="btn btn-sm btn-success">Driving</label>
+          <span id="status-preposition">to</span>
+          <label class="btn btn-sm btn-secondary"><i class="fa fa-map-pin"></i><span id="status-stop">Baseball Stadium</span></label>
         </div>
       </div>
       <div class="row">
@@ -39,7 +50,7 @@
       </div>
       <div class="row">
         <div class="col">
-          <h3>Begin Route button</h3>
+          <h3>Driving/At-Stop Button</h3>
         </div>
       </div>
     </div>
@@ -47,7 +58,7 @@
 
   <div th:replace="fragments/scripts"></div>
   <script src="/js/geolocation.js"></script>
-  <script src="/js/select-assignment.js"></script>
+  <script src="/js/on-assignment.js"></script>
   <script>
     $(document).ready(function() {
       var app = new SelectAssignmentApp();
