@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>App</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <div th:replace="fragments/styles"></div>
+  <link rel="stylesheet" href="/css/select-assignment.css"/>
+</head>
+<body>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="p-1">
+            <a id="btn-deactivate" class="btn btn-warning" href="/deactivate">End Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Status:</label>
+        </div>
+        <div class="col text-right">
+          <label class="btn btn-sm btn-info">Active</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Assignment Info</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Prev/Next Buttons</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Begin Route button</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/scripts"></div>
+  <script src="/js/geolocation.js"></script>
+  <script src="/js/select-assignment.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new SelectAssignmentApp();
+    });
+  </script>
+</body>
+</html>

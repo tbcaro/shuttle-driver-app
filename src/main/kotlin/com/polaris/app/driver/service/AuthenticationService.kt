@@ -11,4 +11,7 @@ interface AuthenticationService {
     fun generateSession(http: HttpServletRequest, attributes: Map<String, Any>)
     fun invalidateSession(http: HttpServletRequest)
     fun getUserContext(http: HttpServletRequest) : UserContext
+    fun isShuttleActive(http: HttpServletRequest) : Boolean
+    fun addShuttleId(http: HttpServletRequest, shuttleId: Int)
+    fun deleteShuttleId(http: HttpServletRequest)
 }

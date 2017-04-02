@@ -17,7 +17,7 @@ class LoginController(private val authService: AuthenticationService) {
 
     @RequestMapping("/")
     fun root(model: Model) : String {
-        return "redirect:/loginForm"
+        return "redirect:/login"
     }
 
     @RequestMapping("/loginForm")
@@ -28,17 +28,18 @@ class LoginController(private val authService: AuthenticationService) {
 
     @RequestMapping("/login")
     fun login(attributes: RedirectAttributes, http: HttpServletRequest, loginAdapter: LoginAdapter) : String {
-
-        loginAdapter.let {
-            if (it.username != null && it.password != null && it.servicecode != null) {
-                authService.authenticate(http, it.username!!, it.password!!, it.servicecode!!)
-            }
+        var loginAttempted = false
+        if (!loginAdapter.username.isNullOrBlank() && !loginAdapter.password.isNullOrBlank() && !loginAdapter.servicecode.isNullOrBlank()) {
+            authService.authenticate(http, loginAdapter.username!!, loginAdapter.password!!, loginAdapter.servicecode!!)
+            loginAttempted = true
         }
 
         if (authService.isAuthenticated(http)) {
             return "redirect:/menu"
-        } else {
+        } else if (loginAttempted){
             throw AuthenticationException("login failed: service code, username, password combination invalid")
+        } else {
+            return "redirect:/loginForm"
         }
     }
 

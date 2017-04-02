@@ -14,6 +14,18 @@ class MenuController(private val authService: AuthenticationService) {
     @RequestMapping("/menu")
     fun menu(model: Model, http: HttpServletRequest) : String {
         if (authService.isAuthenticated(http)) {
+
+            // TBC : TODO : Check to see if user has an "shuttle activity" associated with them
+                // TBC : TODO : If so, check to see if that shuttle activity exists.
+                    // TBC : TODO : If it does, set a flad so that the "Go into service button" is "Resume service"
+                    // TBC : TODO : If it doesn't, delete the shuttle activity from their session.
+            if (authService.isShuttleActive(http)) {
+                model.addAttribute("isInService", true)
+            } else {
+                model.addAttribute("isInService", false)
+            }
+
+            // TBC : Fetch shuttle options
             var shuttleOptions: MutableMap<Int, String> = HashMap()
 
             shuttleOptions.put(1, "Shuttle 1A")

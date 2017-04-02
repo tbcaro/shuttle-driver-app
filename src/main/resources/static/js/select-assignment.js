@@ -1,4 +1,4 @@
-function App() {
+function SelectAssignmentApp() {
   var self = this;
 
   var elements = { };

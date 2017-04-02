@@ -14,6 +14,7 @@ class AuthenticationServiceImpl(val userRepository: UserRepository) : Authentica
     val SERVICE_CODE = "serviceCode"
     val USER_ID = "userId"
     val USERNAME = "username"
+    val SHUTTLE_ID = "shuttleId"
 
     override fun authenticate(http: HttpServletRequest, username: String, password: String, servicecode: String) {
         val users = userRepository.findUserByLogin(username, password, servicecode)
@@ -55,8 +56,8 @@ class AuthenticationServiceImpl(val userRepository: UserRepository) : Authentica
             session.setAttribute(it.key, it.value)
         }
 
-        // TBC : Max inactive session: 30 mins
-        session.maxInactiveInterval = 30 * 60
+        // TBC : Max inactive session: 5 mins
+        session.maxInactiveInterval = 5 * 60
     }
 
     override fun invalidateSession(http: HttpServletRequest) {
@@ -69,20 +70,44 @@ class AuthenticationServiceImpl(val userRepository: UserRepository) : Authentica
     override fun getUserContext(http: HttpServletRequest) : UserContext {
         val session = http.getSession(false)
         session?.let {
-            val serviceId = it.getAttribute(SERVICE_ID) as? Int
-            val servicecode = it.getAttribute(SERVICE_CODE) as? String
-            val userId = it.getAttribute(USER_ID) as? Int
-            val username = it.getAttribute(USERNAME) as? String
 
             val user = UserContext()
-            serviceId?.let { user.serviceId = it }
-            servicecode?.let { user.servicecode = it }
-            userId?.let { user.userId = it }
-            username?.let { user.username = it }
+            (it.getAttribute(SERVICE_ID) as? Int)?.let { user.serviceId = it }
+            (it.getAttribute(SERVICE_CODE) as? String)?.let { user.servicecode = it }
+            (it.getAttribute(USER_ID) as? Int)?.let { user.userId = it }
+            (it.getAttribute(USERNAME) as? String)?.let { user.username = it }
+            (it.getAttribute(SHUTTLE_ID) as? Int)?.let { user.shuttleId = it }
 
             return user
         }
 
         throw Exception("Not authenticated")
+    }
+
+    override fun isShuttleActive(http: HttpServletRequest): Boolean {
+        val session = http.getSession(false)
+        session?.let {
+            try {
+                var user = this.getUserContext(http)
+                if (user.shuttleId > 0) return true
+            } catch (ex: Exception) { }
+        }
+
+        return false
+    }
+
+    override fun addShuttleId(http: HttpServletRequest, shuttleId: Int) {
+        val session = http.getSession(false)
+
+        session?.let {
+            session.setAttribute(SHUTTLE_ID, shuttleId)
+        } ?: throw Exception("Not authenticated")
+    }
+
+    override fun deleteShuttleId(http: HttpServletRequest) {
+        val session = http.getSession(false)
+        session?.let {
+            session.removeAttribute(SHUTTLE_ID)
+        } ?: throw Exception("Not authenticated")
     }
 }
