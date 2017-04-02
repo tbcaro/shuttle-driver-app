@@ -13,13 +13,20 @@
   <div id="main" class="align-self-stretch">
     <div class="container-fluid">
       <div class="row">
-        <div class="col">
+        <div class="col-6">
           <div class="p-1">
-            <a id="btn-deactivate" class="btn btn-warning" href="/deactivate">End Service</a>
+            <a id="btn-deactivate" class="btn btn-sm btn-warning" href="/deactivate">End Service</a>
+          </div>
+        </div>
+        <div class="col-6 text-right">
+          <div class="p-1">
+            <button id="btn-refresh" class="btn btn-sm btn-secondary">
+              <i class="fa fa-refresh"></i>
+            </button>
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="pt-2 row">
         <div class="col">
           <label>Status:</label>
         </div>
@@ -29,17 +36,63 @@
       </div>
       <div class="row">
         <div class="col">
-          <h3>Assignment Info</h3>
+          <label>Select Assignment:</label>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <h3>Prev/Next Buttons</h3>
+          <div id="assignment-card" class="card p-1">
+            <div class="row">
+              <div class="col-6">
+                Route:
+              </div>
+              <div id="route-name-container" class="col-6 text-right">
+                Downtown Loop
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div id="schedule-card" class="card">
+                  <div class="row p-1">
+                    <div class="col-12">
+                      <table class="table table-sm overflow-y">
+                        <tbody>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <h3>Begin Route button</h3>
+      <div class="row pt-2">
+        <div class="col-6 text-center pr-0">
+          <button id="btn-prev" class="btn btn-lg btn-secondary">Prev</button>
+        </div>
+        <div class="col-6 text-center pl-0">
+          <button id="btn-next" class="btn btn-lg btn-secondary">Next</button>
+        </div>
+      </div>
+      <div class="row pt-2">
+        <div class="col-12 text-center">
+          <button id="btn-begin-assignment" class="btn btn-lg btn-success p-4">Begin Assignment</button>
         </div>
       </div>
     </div>
