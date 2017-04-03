@@ -19,6 +19,7 @@ function SelectAssignmentApp() {
     elements.btnPrev = $('#btn-prev');
     elements.btnNext = $('#btn-next');
     elements.btnBeginAssignment = $('#btn-begin-assignment');
+    elements.beginAssignmentForm = $('#begin-assignment-form');
 
     elements.btnPrev.prop('disabled', true);
     elements.btnNext.prop('disabled', true);
@@ -51,7 +52,14 @@ function SelectAssignmentApp() {
     });
 
     elements.btnBeginAssignment.on('click', function() {
-
+      try {
+        var assignment = driverAssignments[assignmentCursor];
+        var form = elements.beginAssignmentForm;
+        form.append(getInput('assignmentId', assignment.assignmentReport.assignmentId));
+        form.submit();
+      } catch (ex) {
+        alert('something went wrong: \n\n' + ex.message);
+      }
     });
   };
 
@@ -132,6 +140,15 @@ function SelectAssignmentApp() {
         });
       }
     }
+  };
+
+  var getInput = function(name, value) {
+    var input = $('<input>');
+    input.prop('type', 'hidden');
+    input.prop('name', name);
+    input.val(value);
+
+    return input;
   };
 
   self.initialize();

@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletRequest
 class OnAssignmentController(private val authService: AuthenticationService) {
 
     @RequestMapping("/begin-assignment")
-    fun beginAssignment(model: Model, http: HttpServletRequest) : String {
+    fun beginAssignment(model: Model, http: HttpServletRequest, assignmentId: Int) : String {
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
                 // TBC : TODO : Check to see if shuttle activity exists.
-                // TBC : TODO : If so, add assignmentId to the activity and begin tracking current index
+                // TBC : TODO : If so, add assignmentId to the activity, set assignment as IN_PROGRESS and track current stop index
                 // TBC : TODO : If not, throw error and return to menu
                 return "on-assignment"
             } else {
