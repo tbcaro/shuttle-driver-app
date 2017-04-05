@@ -1,6 +1,7 @@
 package com.polaris.app.driver.repository.pg
 
 import com.polaris.app.driver.repository.LoginRepository
+import com.polaris.app.driver.repository.UserType
 import com.polaris.app.driver.repository.entity.UserEntity
 import com.polaris.app.driver.service.bo.Login
 import org.springframework.jdbc.core.JdbcTemplate
@@ -14,12 +15,12 @@ class LoginPgRepository(val db: JdbcTemplate): LoginRepository {
                 arrayOf(login.serviceCode, login.username, login.password),
                 {
                     resultSet, rowNum -> UserEntity(
-                        resultSet.getInt("service.serviceid"),
                         resultSet.getInt("user.ID"),
+                        resultSet.getInt("service.serviceid"),
                         resultSet.getString("user.username"),
                         resultSet.getString("user.fname"),
                         resultSet.getString("user.lname"),
-                        resultSet.getString("user.usertype")
+                        UserType.valueOf(resultSet.getString("usertype"))
                     )
                 }
 

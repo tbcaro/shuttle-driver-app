@@ -15,12 +15,12 @@ class LoginServiceImpl(val loginRepository: LoginRepository): LoginService {
         val userEntity = this.loginRepository.checkCredentials(login)
 
         return User(
-                serviceid = userEntity.serviceid,
-                userid = userEntity.userid,
-                username = userEntity.username,
-                fname = userEntity.fname,
-                lname = userEntity.lname,
-                usertype = userEntity.usertype
+                serviceid = userEntity.id,
+                userid = userEntity.serviceId,
+                username = userEntity.userName,
+                fname = userEntity.firstName,
+                lname = userEntity.lastName,
+                usertype = userEntity.userType
         )
     }
 
@@ -28,12 +28,12 @@ class LoginServiceImpl(val loginRepository: LoginRepository): LoginService {
         val userEntity = this.loginRepository.checkCredentials(login)
 
         return User(
-                serviceid = userEntity.serviceid,
-                userid = userEntity.userid,
-                username = userEntity.username,
-                fname = userEntity.fname,
-                lname = userEntity.lname,
-                usertype = userEntity.usertype
+                serviceid = userEntity.id,
+                userid = userEntity.serviceId,
+                username = userEntity.userName,
+                fname = userEntity.firstName,
+                lname = userEntity.lastName,
+                usertype = userEntity.userType
         )
     }
 
