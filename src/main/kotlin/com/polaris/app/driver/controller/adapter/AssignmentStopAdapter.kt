@@ -11,6 +11,8 @@ class AssignmentStopAdapter {
     var order: Int = 0
     var name: String = ""
     var address: String = ""
-    var estArriveTime: LocalTime = LocalTime.now()
-    var estDepartTime: LocalTime? = LocalTime.now()
+    var estArriveTime: LocalTime? = null
+    var estDepartTime: LocalTime? = null
+    var actualArriveTime: LocalTime? = null
+    var actualDepartTime: LocalTime? = null
 }

@@ -19,7 +19,7 @@ class OnAssignmentController(private val authService: AuthenticationService) {
                 // TBC : TODO : Check to see if shuttle activity exists.
                 // TBC : TODO : If so, add assignmentId to the activity, set assignment as IN_PROGRESS and track current stop index
                 // TBC : TODO : If not, throw error and return to menu
-                return "on-assignment"
+                return "redirect:/on-assignment"
             } else {
                 return "redirect:/menu"
             }
@@ -47,7 +47,7 @@ class OnAssignmentController(private val authService: AuthenticationService) {
                 // TBC : TODO : Check to see if shuttle activity exists.
                 // TBC : TODO : If so, delete assignment id from activity, but do NOT mark assignment COMPLETED
                 // TBC : TODO : If not, throw error and return to menu
-                return "select-assignment"
+                return "redirect:/select-assignment"
             } else {
                 return "redirect:/menu"
             }
@@ -61,7 +61,7 @@ class OnAssignmentController(private val authService: AuthenticationService) {
                 // TBC : TODO : Check to see if shuttle activity exists.
                 // TBC : TODO : If so, delete assignment id from activity AND mark assignment COMPLETED
                 // TBC : TODO : If not, throw error and return to menu
-                return "select-assignment"
+                return "redirect:/select-assignment"
             } else {
                 return "redirect:/menu"
             }

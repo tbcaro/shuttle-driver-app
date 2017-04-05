@@ -168,14 +168,54 @@ class ApiController(private val authService: AuthenticationService) {
     }
 
     @RequestMapping("/postActivity")
-    fun postActivity(http: HttpServletRequest, @RequestBody shuttleActivityAdapter: ShuttleActivityAdapter) : ResponseEntity<ShuttleActivityAdapter?> {
+    fun postActivity(http: HttpServletRequest, @RequestBody shuttleActivityAdapter: ShuttleActivityAdapter) : ResponseEntity<AssignmentDetailsAdapter?> {
         if (authService.isAuthenticated(http)) {
             val userContext = authService.getUserContext(http)
 
             if (authService.isShuttleActive(http)) {
                 shuttleActivityAdapter.shuttleId = userContext.shuttleId
                 shuttleActivityAdapter.driverId = userContext.userId
-                return ResponseEntity(shuttleActivityAdapter, HttpStatus.OK)
+
+                // TBC : TODO : Return the assignment as the response from this. On client check if different from client version.
+                val stop1 = AssignmentStopAdapter()
+                stop1.stopId = 1
+                stop1.name = "Test Stop 1"
+                stop1.order = 1
+                stop1.assingmentStopId = 1
+                stop1.address = "1 Example Address Rd"
+                stop1.estArriveTime = LocalTime.of(17, 0)
+                stop1.estDepartTime = LocalTime.of(17, 30)
+
+                val stop2 = AssignmentStopAdapter()
+                stop2.stopId = 2
+                stop2.name = "Test Stop 2"
+                stop2.order = 2
+                stop2.assingmentStopId = 2
+                stop2.address = "2 Example Address Rd"
+                stop2.estArriveTime = LocalTime.of(18, 0)
+                stop2.estDepartTime = LocalTime.of(18, 30)
+
+                val stop3 = AssignmentStopAdapter()
+                stop3.stopId = 3
+                stop3.name = "Test Stop 3"
+                stop3.order = 3
+                stop3.assingmentStopId = 3
+                stop3.address = "3 Example Address Rd"
+                stop3.estArriveTime = LocalTime.of(19, 0)
+                stop3.estDepartTime = LocalTime.of(19, 30)
+
+                val assignment1 = AssignmentDetailsAdapter()
+                assignment1.driverId = userContext.userId
+                assignment1.shuttleId = userContext.shuttleId
+                assignment1.driverName = "Test Driver"
+                assignment1.shuttleName = "Test Shuttle"
+                assignment1.routeId = 1
+                assignment1.routeName = "Test Route 1"
+                assignment1.startTime = LocalTime.now()
+                assignment1.assignmentReport = AssignmentReport()
+                assignment1.assignmentReport?.assignmentId = 1
+                assignment1.assignmentReport?.assignmentStops = arrayListOf(stop1, stop2, stop3)
+                return ResponseEntity(assignment1, HttpStatus.OK)
             } else {
                 return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
             }
