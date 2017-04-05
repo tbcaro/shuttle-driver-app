@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>App</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <div th:replace="fragments/styles"></div>
+  <link rel="stylesheet" href="/css/on-assignment.css"/>
+</head>
+<body>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col text-center">
+          <div class="pt-1">
+            <a id="btn-end-assignment-container" class="btn btn-secondary" href="/end-assignment">End Assignment</a>
+            <a id="btn-finish-assignment-container" class="btn btn-primary" href="/finish-assignment">Complete Assignment</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Status:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <div>
+            <label id="status-label" class="btn btn-success mb-1"></label>
+          </div>
+          <label id="status-preposition"></label>
+          <div>
+            <label id="current-stop-status" class="btn btn-secondary mt-1"><i class="fa fa-map-pin"></i> <span id="status-stop"></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div id="assignment-card" class="card p-1">
+            <div class="row">
+              <div class="col-6">
+                Route:
+              </div>
+              <div id="route-name-container" class="col-6 text-right"></div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div id="stop-card" class="card p-1">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <i class="fa fa-map-pin"></i>
+                      <span id="current-stop-container"></span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 text-right">
+                      Arrive:
+                    </div>
+                    <div id="est-stop-arrive" class="col-6"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 text-right">
+                      Depart:
+                    </div>
+                    <div id="est-stop-depart" class="col-6"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-2">
+        <div class="col-6 text-center pr-0">
+          <button id="btn-prev" class="btn btn-lg btn-secondary">Prev</button>
+        </div>
+        <div class="col-6 text-center pl-0">
+          <button id="btn-next" class="btn btn-lg btn-secondary">Next</button>
+        </div>
+      </div>
+      <div class="row pt-2">
+        <div class="col-12 text-center">
+          <button id="btn-change-status" class="btn btn-lg p-4"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/scripts"></div>
+  <script src="/js/geolocation.js"></script>
+  <script src="/js/on-assignment.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new OnAssignmentApp();
+    });
+  </script>
+</body>
+</html>
