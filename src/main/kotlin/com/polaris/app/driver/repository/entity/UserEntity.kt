@@ -1,10 +1,12 @@
 package com.polaris.app.driver.repository.entity
 
+import com.polaris.app.driver.repository.UserType
+
 data class UserEntity(
-        val serviceid: Int,
-        val userid: Int,
-        val username: String,
-        val fname: String,
-        val lname: String,
-        val usertype: String
+        val id: Int,
+        val serviceId: Int,
+        val firstName: String,
+        val lastName: String,
+        val userName: String,
+        val userType: UserType
 )

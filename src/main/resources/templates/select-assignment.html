@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>App</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <div th:replace="fragments/styles"></div>
+  <link rel="stylesheet" href="/css/select-assignment.css"/>
+</head>
+<body>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <div class="pt-1">
+            <a id="btn-deactivate" class="btn btn-secondary" href="/deactivate">End Service</a>
+          </div>
+        </div>
+        <div class="col-6 text-right">
+          <div class="pt-1">
+            <button id="btn-refresh" class="btn btn-secondary">
+              <i class="fa fa-refresh"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="pt-2 row">
+        <div class="col">
+          <label>Status:</label>
+        </div>
+        <div class="col text-right">
+          <label class="btn btn-sm btn-info">Active</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Select Assignment:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div id="assignment-card" class="card p-1">
+            <div class="row">
+              <div class="col-6">
+                Route:
+              </div>
+              <div id="route-name-container" class="col-6 text-right">
+                Downtown Loop
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div id="schedule-card" class="card">
+                  <div class="row p-1">
+                    <div class="col-12">
+                      <table class="table table-sm overflow-y">
+                        <tbody>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-map-pin"></i></td>
+                            <td>Baseball Stadium</td>
+                            <td>5:00 PM</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-2">
+        <div class="col-6 text-center pr-0">
+          <button id="btn-prev" class="btn btn-lg btn-secondary">Prev</button>
+        </div>
+        <div class="col-6 text-center pl-0">
+          <button id="btn-next" class="btn btn-lg btn-secondary">Next</button>
+        </div>
+      </div>
+      <div class="row pt-2">
+        <div class="col-12 text-center">
+          <button id="btn-begin-assignment" class="btn btn-lg btn-success p-4">Begin Assignment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form id="begin-assignment-form" action="/begin-assignment" method="post" style="display: none;"></form>
+
+  <div th:replace="fragments/scripts"></div>
+  <script src="/js/geolocation.js"></script>
+  <script src="/js/select-assignment.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new SelectAssignmentApp();
+    });
+  </script>
+</body>
+</html>
