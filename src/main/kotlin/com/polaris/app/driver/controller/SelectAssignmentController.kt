@@ -41,7 +41,7 @@ class SelectAssignmentController(private val authService: AuthenticationService)
     }
 
     @RequestMapping("/select-assignment")
-    fun app(model: Model, http: HttpServletRequest) : String {
+    fun selectAssignment(model: Model, http: HttpServletRequest) : String {
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
                 // TBC : TODO : Check to see if shuttle activity exists.
