@@ -5,8 +5,8 @@ import com.polaris.app.driver.service.bo.Stop
 import java.time.LocalDateTime
 
 interface OnRouteService{
-    fun atStop(assignmentID: Int, TOA: LocalDateTime, index: Int)
+    /*fun atStop(assignmentID: Int, TOA: LocalDateTime, index: Int)
     fun leaveStop(assignmentID: Int, TOD: LocalDateTime, index: Int): List<Stop>
-    fun getIndexData(assignmentID: Int, index: Int): Index
-    fun endRoute(assignmentID: Int, TOD: LocalDateTime, index: Int)
+    fun getIndexData(assignmentID: Int, index: Int): Index*/
+    fun endAssignment(assignmentID: Int, early: Boolean)
 }

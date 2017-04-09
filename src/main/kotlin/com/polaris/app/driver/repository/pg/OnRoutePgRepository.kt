@@ -1,6 +1,8 @@
 package com.polaris.app.driver.repository.pg
 
+import com.polaris.app.driver.controller.adapter.enums.AssignmentStatus
 import com.polaris.app.driver.repository.OnRouteRepository
+import com.polaris.app.driver.repository.entity.AssignmentStatusEntity
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
 import com.polaris.app.driver.repository.entity.IndexEntity
 import com.polaris.app.driver.repository.entity.StopCheckEntity
@@ -10,7 +12,7 @@ import java.time.LocalDateTime
 
 @Component
 class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
-    override fun stop(assignmentid: Int, TOA: LocalDateTime, index: Int) {
+    /*override fun stop(assignmentid: Int, TOA: LocalDateTime, index: Int) {
         db.update(
                 "UPDATE assignment_stop SET timeofarrival = ? WHERE assignmentid = ? AND \"Index\" = ?;",
                 arrayOf(TOA, assignmentid, index)
@@ -70,9 +72,9 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
                 }
         )
         return stops
-    }
+    }*/
 
-    override fun endRoute(assignmentid: Int) {
+    override fun endAssignment(assignmentid: Int) {
         db.update(
                 "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
                 arrayOf(assignmentid)
@@ -80,6 +82,45 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
         db.update(
                 "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
                 arrayOf(assignmentid)
+        )
+    }
+
+    override fun earlyEndAssignment(assignmentid: Int){
+        db.update(
+                "UPDATE assignment SET status = 'UNFINISHED' WHERE assignmentid = ?;",
+                arrayOf(assignmentid)
+        )
+        db.update(
+                "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
+                arrayOf(assignmentid)
+        )
+    }
+
+    override fun checkAssignmentStatus(assignmentid: Int): Boolean {
+        val TOA = db.query(
+                "SELECT * FROM assignment_stop WHERE assignmentid = ?",
+                arrayOf(assignmentid),{
+                    resultSet, rowNum -> AssignmentStatusEntity(
+                        resultSet.getInt("timeofarrival")
+                    )
+                }
+        )
+        TOA.forEach {
+            if (it.TOA == null){
+                return false
+            }
+        }
+        return true
+    }
+
+    override fun endAssignmentWithTime(assignmentid: Int) {
+        db.update(
+                "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
+                arrayOf(assignmentid)
+        )
+        db.update(
+                "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null AND timeofarrival = ? WHERE assignmentid = ?;",
+                arrayOf(LocalDateTime.now(), assignmentid)
         )
     }
 }

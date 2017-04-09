@@ -1,5 +1,7 @@
 package com.polaris.app.driver.repository
 
-/**
- * Created by Tyler on 4/8/2017.
- */
+enum class UpdateType{
+    NORMAL,
+    DEPART,
+    ARRIVE
+}

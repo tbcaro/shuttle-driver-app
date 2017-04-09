@@ -1,5 +1,7 @@
 package com.polaris.app.driver.repository.entity
 
-/**
- * Created by Tyler on 4/8/2017.
- */
+import com.polaris.app.driver.controller.adapter.enums.AssignmentStatus
+
+data class AssignmentStatusEntity(
+        val TOA: Int?
+)

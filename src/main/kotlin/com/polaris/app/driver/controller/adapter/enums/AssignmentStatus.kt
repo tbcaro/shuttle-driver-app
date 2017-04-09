@@ -1,5 +1,8 @@
 package com.polaris.app.driver.controller.adapter.enums
 
-/**
- * Created by Tyler on 4/8/2017.
- */
+enum class AssignmentStatus {
+    SCHEDULED,
+    IN_PROGRESS,
+    UNFINISHED,
+    COMPLETED
+}
