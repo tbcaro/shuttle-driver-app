@@ -8,7 +8,7 @@ import com.polaris.app.driver.service.bo.Stop
 import java.time.LocalDateTime
 
 class OnRouteServiceImpl(val onRouteRepository: OnRouteRepository): OnRouteService{
-    override fun atStop(assignmentID: Int, TOA: LocalDateTime, index: Int) {
+    /*override fun atStop(assignmentID: Int, TOA: LocalDateTime, index: Int) {
         this.onRouteRepository.stop(assignmentID, TOA, index)
     }
 
@@ -43,10 +43,17 @@ class OnRouteServiceImpl(val onRouteRepository: OnRouteRepository): OnRouteServi
                 index = stopCheckEntity.index,
                 remainingStops = stopCheckEntity.remainingStops
         )
-    }
+    }*/
 
-    override fun endRoute(assignmentID: Int, TOD: LocalDateTime, index: Int) {
-        this.onRouteRepository.driveUpdate(assignmentID,TOD, index)
-        this.onRouteRepository.endRoute(assignmentID)
+    override fun endAssignment(assignmentID: Int, early: Boolean) {
+        if (early){
+            this.onRouteRepository.earlyEndAssignment(assignmentID)
+        }
+        else {
+            if (this.onRouteRepository.checkAssignmentStatus(assignmentID)) {
+                this.onRouteRepository.endAssignmentWithTime(assignmentID)
+            }
+            this.onRouteRepository.endAssignment(assignmentID)
+        }
     }
 }
