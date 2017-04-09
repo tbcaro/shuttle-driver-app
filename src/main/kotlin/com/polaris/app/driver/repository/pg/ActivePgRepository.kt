@@ -12,7 +12,7 @@ import java.time.LocalDate
 class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
     override fun findAssignment(driverID: Int, shuttleID: Int, startDate: LocalDate): AssignmentEntity {
         val assignments = db.query(
-                "SELECT * FROM assignment WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' ORDER BY starttime;",
+                "SELECT * FROM assignment WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND isarchived = false ORDER BY starttime;",
                 arrayOf(driverID, shuttleID, startDate),
                 {
                     resultSet, rowNum -> AssignmentEntity(

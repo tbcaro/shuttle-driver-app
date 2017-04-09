@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
     override fun findShuttles(serviceid: Int): List<InactiveShuttleEntity> {
         val inactiveShuttleEntities = db.query(
-                "SELECT \"ID\", \"Name\" FROM shuttle WHERE serviceid = ?;",
+                "SELECT \"ID\", \"Name\" FROM shuttle WHERE serviceid = ? AND isarchived = false and isactive = true;",
                 arrayOf(serviceid),
                 {
                     resultSet, rowNum -> InactiveShuttleEntity(
