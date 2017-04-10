@@ -15,11 +15,11 @@ class LoginPgRepository(val db: JdbcTemplate): LoginRepository {
                 arrayOf(login.serviceCode, login.username, login.password),
                 {
                     resultSet, rowNum -> UserEntity(
-                        resultSet.getInt("user.ID"),
-                        resultSet.getInt("service.serviceid"),
-                        resultSet.getString("user.username"),
-                        resultSet.getString("user.fname"),
-                        resultSet.getString("user.lname"),
+                        resultSet.getInt("ID"),
+                        resultSet.getInt("serviceid"),
+                        resultSet.getString("username"),
+                        resultSet.getString("fname"),
+                        resultSet.getString("lname"),
                         UserType.valueOf(resultSet.getString("usertype"))
                     )
                 }
