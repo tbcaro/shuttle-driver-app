@@ -57,18 +57,18 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
     override fun beginRoute(shuttleID: Int, assignmentID: Int) {
         db.update(
                 "UPDATE assignment SET status = 'IN_PROGRESS' WHERE assignmentid = ?;",
-                arrayOf(assignmentID)
+                assignmentID
         )
         db.update(
                 "UPDATE shuttle_activity SET status = 'DRIVING' AND assignmentid = ? WHERE shuttleid = ?;",
-                arrayOf(assignmentID, shuttleID)
+                assignmentID, shuttleID
         )
     }
 
     override fun endService(shuttleID: Int) {
         db.update(
                 "DELETE FROM shuttle_activity WHERE shuttleid = ?;",
-                arrayOf(shuttleID)
+                shuttleID
         )
     }
 }

@@ -77,22 +77,22 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
     override fun endAssignment(assignmentid: Int) {
         db.update(
                 "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
-                arrayOf(assignmentid)
+                assignmentid
         )
         db.update(
                 "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
-                arrayOf(assignmentid)
+                assignmentid
         )
     }
 
     override fun earlyEndAssignment(assignmentid: Int){
         db.update(
                 "UPDATE assignment SET status = 'UNFINISHED' WHERE assignmentid = ?;",
-                arrayOf(assignmentid)
+                assignmentid
         )
         db.update(
                 "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
-                arrayOf(assignmentid)
+                assignmentid
         )
     }
 
@@ -116,11 +116,11 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
     override fun endAssignmentWithTime(assignmentid: Int) {
         db.update(
                 "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
-                arrayOf(assignmentid)
+                assignmentid
         )
         db.update(
                 "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null AND timeofarrival = ? WHERE assignmentid = ?;",
-                arrayOf(LocalDateTime.now(), assignmentid)
+                LocalDateTime.now(), assignmentid
         )
     }
 }

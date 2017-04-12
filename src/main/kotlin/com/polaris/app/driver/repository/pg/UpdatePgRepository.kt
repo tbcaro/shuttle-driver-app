@@ -14,7 +14,7 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
     override fun pushShuttleActivity(shuttle: UpdateShuttle) {
         db.update(
                 "UPDATE shuttle_activity SET heading = ? AND latitude = ? AND longitude = ? AND \"Index\" = ? AND status = ? WHERE shuttleid = ?;",
-                arrayOf(shuttle.heading, shuttle.latitude, shuttle.longitude, shuttle.index, shuttle.status, shuttle.shuttleID)
+                shuttle.heading, shuttle.latitude, shuttle.longitude, shuttle.index, shuttle.status, shuttle.shuttleID
         )
     }
 
@@ -46,13 +46,13 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
         if (type == UpdateType.ARRIVE) {
             db.update(
                 "UPDATE assignment_stop SET timeofarrival = ? WHERE assignmentid = ? AND \"Index\" = ?;",
-                arrayOf(LocalDateTime.now(), shuttle.assignmentID, shuttle.index)
+                LocalDateTime.now(), shuttle.assignmentID, shuttle.index
             )
         }
         else if (type == UpdateType.DEPART) {
             db.update(
                 "UPDATE assignment_stop SET timeofdeparture = ? WHERE assignmentid = ? AND \"Index\" = ?;",
-                arrayOf(LocalDateTime.now(), shuttle.assignmentID, shuttle.index)
+                LocalDateTime.now(), shuttle.assignmentID, shuttle.index
             )
         }
     }

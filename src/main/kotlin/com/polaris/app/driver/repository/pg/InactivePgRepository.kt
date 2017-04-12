@@ -52,7 +52,7 @@ class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
     override fun beginService(s: ActiveShuttle) {
         db.update(
                 "INSERT INTO shuttle_activity (shuttleid, latitude, longitude, status, driverid, heading) VALUES (?, ?, ?, 'ACTIVE', ?);",
-                arrayOf(s.shuttleID, s.latitude, s.longitude,s.status, s.driverID, s.heading)
+                s.shuttleID, s.latitude, s.longitude,s.status, s.driverID, s.heading
         )
     }
 }
