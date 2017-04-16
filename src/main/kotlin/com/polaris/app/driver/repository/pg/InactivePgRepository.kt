@@ -34,7 +34,7 @@ class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
                 )
                 }
         )//Should return true if the given shuttle does not have any current shuttle_activity
-        return checkEntities == null
+        return checkEntities.isEmpty()
     }
 
     override fun checkDriver(driver: Int): Boolean {
@@ -47,12 +47,13 @@ class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
                 )
                 }
         )//Should return true if the given driver does not have any current shuttle_activity
-        return checkEntities == null    }
+        return checkEntities.isEmpty()
+    }
 
     override fun beginService(s: ActiveShuttle) {
         db.update(
-                "INSERT INTO shuttle_activity (shuttleid, latitude, longitude, status, driverid, heading) VALUES (?, ?, ?, 'ACTIVE', ?);",
-                s.shuttleID, s.latitude, s.longitude,s.status, s.driverID, s.heading
+                "INSERT INTO shuttle_activity (shuttleid, latitude, longitude, status, driverid, heading) VALUES (?, ?, ?, ?::shuttle_status, ?, ?);",
+                s.shuttleID, s.latitude, s.longitude, s.status, s.driverID, s.heading
         )
     }
 }

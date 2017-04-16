@@ -6,6 +6,7 @@ import com.polaris.app.driver.service.InactiveService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -13,7 +14,8 @@ import javax.servlet.http.HttpServletRequest
 class MenuController(private val authService: AuthenticationService, private val inactiveService: InactiveService) {
 
     @RequestMapping("/menu")
-    fun menu(model: Model, http: HttpServletRequest) : String {
+    fun menu(attributes: RedirectAttributes, model: Model, http: HttpServletRequest) : String {
+        attributes.asMap().forEach { model.addAttribute(it.key, it.value) }
         if (authService.isAuthenticated(http)) {
             val userContext = authService.getUserContext(http)
             val shuttles = inactiveService.retrieveShuttles(userContext.serviceId)

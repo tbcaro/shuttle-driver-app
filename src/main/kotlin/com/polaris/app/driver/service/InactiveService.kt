@@ -6,6 +6,5 @@ import java.math.BigDecimal
 
 interface InactiveService{
     fun retrieveShuttles(serviceid: Int): List<InactiveShuttle>
-    fun beginActiveService(s: ActiveShuttle)
-    fun beginActiveService(shuttleID: Int, driverID: Int, latitude: BigDecimal, longitude: BigDecimal, status: String, heading: BigDecimal)
+    fun beginActiveService(shuttleID: Int, driverID: Int)
 }

@@ -1,5 +1,6 @@
 package com.polaris.app.driver.service.impl
 
+import com.polaris.app.dispatch.controller.adapter.enums.ShuttleState
 import com.polaris.app.driver.repository.InactiveRepository
 import com.polaris.app.driver.service.InactiveService
 import com.polaris.app.driver.service.bo.ActiveShuttle
@@ -21,18 +22,14 @@ class InactiveServiceImpl(val inactiveRepository: InactiveRepository): InactiveS
         return shuttles
     }
 
-    override fun beginActiveService(s: ActiveShuttle) {
-        this.inactiveRepository.beginService(s)
-    }
-
-    override fun beginActiveService(shuttleID: Int, driverID: Int, latitude: BigDecimal, longitude: BigDecimal, status: String, heading: BigDecimal) {
+    override fun beginActiveService(shuttleID: Int, driverID: Int) {
         val s = ActiveShuttle(
                 shuttleID = shuttleID,
                 driverID = driverID,
-                latitude = latitude,
-                longitude = longitude,
-                status = status,
-                heading = heading
+                latitude = BigDecimal("0"),
+                longitude = BigDecimal("0"),
+                status = ShuttleState.ACTIVE.toString(),
+                heading = BigDecimal("0")
         )
 
         if (this.inactiveRepository.checkShuttle(shuttleID)) {
