@@ -4,6 +4,7 @@ import com.polaris.app.driver.controller.adapter.ActivateAdapter
 import com.polaris.app.driver.controller.exception.AuthenticationException
 import com.polaris.app.driver.service.ActiveService
 import com.polaris.app.driver.service.AuthenticationService
+import com.polaris.app.driver.service.OnRouteService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,13 +13,17 @@ import javax.servlet.http.HttpServletRequest
 
 @Controller
 class OnAssignmentController(private val authService: AuthenticationService,
-                             private val activeService: ActiveService) {
+                             private val activeService: ActiveService,
+                             private val onRouteService: OnRouteService
+) {
 
     @RequestMapping("/begin-assignment")
     fun beginAssignment(model: Model, http: HttpServletRequest, assignmentId: Int) : String {
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
                 // TBC : TODO : Check to see if shuttle activity exists.
+                val userContext = authService.getUserContext(http)
+                activeService.startRoute(userContext.shuttleId, assignmentId)
                 // TBC : TODO : If so, add assignmentId to the activity, set assignment as IN_PROGRESS and track current stop index
                 // TBC : TODO : If not, throw error and return to menu
                 return "redirect:/on-assignment"
@@ -47,6 +52,8 @@ class OnAssignmentController(private val authService: AuthenticationService,
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
                 // TBC : TODO : Check to see if shuttle activity exists.
+                val userContext = authService.getUserContext(http)
+                //onRouteService.endAssignment(assignmentId, true)
                 // TBC : TODO : If so, delete assignment id from activity, but do NOT mark assignment COMPLETED
                 // TBC : TODO : If not, throw error and return to menu
                 return "redirect:/select-assignment"
@@ -61,6 +68,8 @@ class OnAssignmentController(private val authService: AuthenticationService,
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
                 // TBC : TODO : Check to see if shuttle activity exists.
+                val userContext = authService.getUserContext(http)
+                //onRouteService.endAssignment(assignmentId, false)
                 // TBC : TODO : If so, delete assignment id from activity AND mark assignment COMPLETED
                 // TBC : TODO : If not, throw error and return to menu
                 return "redirect:/select-assignment"
