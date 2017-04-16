@@ -13,8 +13,8 @@ import java.time.LocalDateTime
 class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
     override fun pushShuttleActivity(shuttle: UpdateShuttle) {
         db.update(
-                "UPDATE shuttle_activity SET heading = ?, latitude = ?, longitude = ?, \"Index\" = ?, status = ? WHERE shuttleid = ?;",
-                shuttle.heading, shuttle.latitude, shuttle.longitude, shuttle.index, shuttle.status, shuttle.shuttleID
+                "UPDATE shuttle_activity SET heading = ?, latitude = ?, longitude = ?, \"Index\" = ?, status = ?::shuttle_status WHERE shuttleid = ?;",
+                shuttle.heading, shuttle.latitude, shuttle.longitude, shuttle.index, shuttle.status.toString(), shuttle.shuttleID
         )
     }
 
