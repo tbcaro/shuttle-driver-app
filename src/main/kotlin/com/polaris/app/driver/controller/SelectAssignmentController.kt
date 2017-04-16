@@ -68,7 +68,9 @@ class SelectAssignmentController(private val authService: AuthenticationService,
         if (authService.isAuthenticated(http)) {
 
             if (authService.isShuttleActive(http)) {
-                // TBC : TODO : Delete shuttleActivity if one exists based on session info
+                // TBC : Delete shuttleActivity if one exists based on session info
+                val userContext = authService.getUserContext(http)
+                activeService.endService(userContext.shuttleId)
                 // TBC : Remove shuttleId from session info
                 authService.deleteShuttleId(http)
             }
