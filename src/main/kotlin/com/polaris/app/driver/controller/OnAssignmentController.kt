@@ -2,6 +2,7 @@ package com.polaris.app.driver.controller
 
 import com.polaris.app.driver.controller.adapter.ActivateAdapter
 import com.polaris.app.driver.controller.exception.AuthenticationException
+import com.polaris.app.driver.service.ActiveService
 import com.polaris.app.driver.service.AuthenticationService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import javax.servlet.http.HttpServletRequest
 
 @Controller
-class OnAssignmentController(private val authService: AuthenticationService) {
+class OnAssignmentController(private val authService: AuthenticationService,
+                             private val activeService: ActiveService) {
 
     @RequestMapping("/begin-assignment")
     fun beginAssignment(model: Model, http: HttpServletRequest, assignmentId: Int) : String {
