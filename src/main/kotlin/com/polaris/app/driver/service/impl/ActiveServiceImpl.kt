@@ -51,4 +51,45 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
     override fun endService(shuttleID: Int) {
         this.activeRepository.endService(shuttleID)
     }
+
+    override fun retrieveAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<Assignment> {
+        val a = this.activeRepository.findAssignments(driverID, shuttleID, startDate)
+        val assignmentStops = arrayListOf<Stop>()
+        val assignments = arrayListOf<Assignment>()
+
+        a.forEach{
+            val stopEntities = this.activeRepository.findAssignmentStops(it.assignmentID)
+
+            stopEntities.forEach{
+                val stop = Stop(
+                        assignmentStopID = it.assignmentStopID,
+                        assignmentID = it.assignmentID,
+                        index = it.index,
+                        ETA = it.ETA,
+                        ETD = it.ETD,
+                        TOA = it.TOA,
+                        TOD = it.TOD,
+                        stopID = it.stopID,
+                        address = it.address,
+                        latitude = it.latitude,
+                        longitude = it.longitude
+                )
+                assignmentStops.add(stop)
+            }
+            val assignment = Assignment(
+                    serviceID = it.serviceID,
+                    assignmentID = it.assignmentID,
+                    startDate = it.startDate,
+                    startTime = it.startTime,
+                    routeID = it.routeID,
+                    routeName = it.routeName ?: "",
+                    driverID = it.driverID,
+                    shuttleID = it.shuttleID,
+                    status = it.status,
+                    stops = assignmentStops
+            )
+            assignments.add(assignment)
+        }
+        return assignments
+    }
 }

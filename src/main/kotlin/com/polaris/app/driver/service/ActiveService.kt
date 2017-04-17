@@ -7,4 +7,5 @@ interface ActiveService{
     fun retrieveAssignment(driverID: Int, shuttleID: Int, startDate: LocalDate): Assignment
     fun startRoute(shuttleID: Int, assignmentID: Int)
     fun endService(shuttleID: Int)
+    fun retrieveAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<Assignment>
 }

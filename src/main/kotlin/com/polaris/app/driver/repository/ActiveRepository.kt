@@ -9,4 +9,5 @@ interface ActiveRepository{
     fun findAssignmentStops(assignmentID: Int): List<AssignmentStopEntity>
     fun beginRoute(shuttleID: Int, assignmentID: Int)
     fun endService(shuttleID: Int)
+    fun findAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<AssignmentEntity>
 }

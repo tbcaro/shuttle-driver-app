@@ -71,4 +71,25 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                 shuttleID
         )
     }
+
+    override fun findAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<AssignmentEntity> {
+        val assignments = db.query(
+                "SELECT * FROM assignment WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND isarchived = false ORDER BY starttime;",
+                arrayOf(driverID, shuttleID, startDate),
+                {
+                    resultSet, rowNum -> AssignmentEntity(
+                        resultSet.getInt("assignmentid"),
+                        resultSet.getInt("serviceid"),
+                        resultSet.getInt("driverid"),
+                        resultSet.getInt("shuttleid"),
+                        resultSet.getInt("routeid"),
+                        resultSet.getTimestamp("starttime").toLocalDateTime().toLocalTime(),
+                        resultSet.getTimestamp("startdate").toLocalDateTime().toLocalDate(),
+                        resultSet.getString("routename"),
+                        resultSet.getString("status")
+                )
+                }
+        )
+        return assignments
+    }
 }
