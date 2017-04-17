@@ -1,8 +1,10 @@
 package com.polaris.app.driver.repository.pg
 
+import com.polaris.app.dispatch.controller.adapter.enums.ShuttleState
 import com.polaris.app.driver.repository.ActiveRepository
 import com.polaris.app.driver.repository.entity.AssignmentEntity
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
+import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -91,5 +93,25 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                 }
         )
         return assignments
+    }
+
+    override fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity {
+        val sa = db.query(
+                "SELECT * FROM shuttle_activity WHERE shuttleid = ?",
+                arrayOf(serviceID),{
+            resultSet, rowNum -> ShuttleActivityEntity(
+                resultSet.getInt("shuttleid"),
+                resultSet.getInt("driverid"),
+                resultSet.getInt("assignmentid"),
+                resultSet.getInt("assignment_stop_id"),
+                resultSet.getInt("Index"),
+                resultSet.getBigDecimal("latitude"),
+                resultSet.getBigDecimal("longitude"),
+                resultSet.getBigDecimal("heading"),
+                status = ShuttleState.valueOf(resultSet.getString("status"))
+        )
+        }
+        )
+        return sa[0]
     }
 }

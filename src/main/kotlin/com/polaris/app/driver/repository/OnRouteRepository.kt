@@ -2,6 +2,7 @@ package com.polaris.app.driver.repository
 
 import com.polaris.app.driver.controller.adapter.enums.AssignmentStatus
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
+import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import com.polaris.app.driver.repository.entity.StopCheckEntity
 import java.time.LocalDateTime
 
@@ -14,4 +15,5 @@ interface OnRouteRepository{
     fun earlyEndAssignment(assignmentid: Int)
     fun checkAssignmentStatus(assignmentid: Int): Boolean
     fun endAssignmentWithTime(assignmentid: Int)
+    fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity
 }

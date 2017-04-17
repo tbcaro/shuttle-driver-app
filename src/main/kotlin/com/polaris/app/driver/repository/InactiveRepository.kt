@@ -1,6 +1,7 @@
 package com.polaris.app.driver.repository
 
 import com.polaris.app.driver.repository.entity.InactiveShuttleEntity
+import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import com.polaris.app.driver.service.bo.ActiveShuttle
 import com.polaris.app.driver.service.bo.InactiveShuttle
 
@@ -13,4 +14,5 @@ interface InactiveRepository{
         //Should this function return false, warn user that their login info could be compromised
         //If this function returns true, proceed to beginService
     fun beginService(s: ActiveShuttle)
+    fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity
 }

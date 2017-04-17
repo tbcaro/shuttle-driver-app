@@ -4,6 +4,7 @@ import com.polaris.app.driver.repository.OnRouteRepository
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
 import com.polaris.app.driver.service.OnRouteService
 import com.polaris.app.driver.service.bo.Index
+import com.polaris.app.driver.service.bo.ShuttleActivity
 import com.polaris.app.driver.service.bo.Stop
 import java.time.LocalDateTime
 
@@ -55,5 +56,21 @@ class OnRouteServiceImpl(val onRouteRepository: OnRouteRepository): OnRouteServi
             }
             this.onRouteRepository.endAssignment(assignmentID)
         }
+    }
+
+    override fun retrieveShuttleActivity(shuttleID: Int): ShuttleActivity {
+        val sae = this.onRouteRepository.findShuttleActivity(shuttleID)
+        val sa = ShuttleActivity(
+                shuttleID = sae.shuttleID,
+                driverID = sae.driverID,
+                assignmentID = sae.assignmentID,
+                assignmentStopID = sae.assignmentStopID,
+                index = sae.index,
+                latitude = sae.latitude,
+                longitude = sae.longitude,
+                heading = sae.heading,
+                status = sae.status
+        )
+        return sa
     }
 }

@@ -5,6 +5,7 @@ import com.polaris.app.driver.repository.entity.AssignmentEntity
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
 import com.polaris.app.driver.service.ActiveService
 import com.polaris.app.driver.service.bo.Assignment
+import com.polaris.app.driver.service.bo.ShuttleActivity
 import com.polaris.app.driver.service.bo.Stop
 import java.time.LocalDate
 
@@ -91,5 +92,21 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
             assignments.add(assignment)
         }
         return assignments
+    }
+
+    override fun retrieveShuttleActivity(shuttleID: Int): ShuttleActivity {
+        val sae = this.activeRepository.findShuttleActivity(shuttleID)
+        val sa = ShuttleActivity(
+                shuttleID = sae.shuttleID,
+                driverID = sae.driverID,
+                assignmentID = sae.assignmentID,
+                assignmentStopID = sae.assignmentStopID,
+                index = sae.index,
+                latitude = sae.latitude,
+                longitude = sae.longitude,
+                heading = sae.heading,
+                status = sae.status
+        )
+        return sa
     }
 }

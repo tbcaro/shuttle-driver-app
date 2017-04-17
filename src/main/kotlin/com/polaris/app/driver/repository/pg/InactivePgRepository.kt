@@ -1,8 +1,10 @@
 package com.polaris.app.driver.repository.pg
 
+import com.polaris.app.dispatch.controller.adapter.enums.ShuttleState
 import com.polaris.app.driver.repository.InactiveRepository
 import com.polaris.app.driver.repository.entity.CheckEntity
 import com.polaris.app.driver.repository.entity.InactiveShuttleEntity
+import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import com.polaris.app.driver.service.bo.ActiveShuttle
 import com.polaris.app.driver.service.bo.InactiveShuttle
 import org.springframework.jdbc.core.JdbcTemplate
@@ -55,5 +57,25 @@ class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
                 "INSERT INTO shuttle_activity (shuttleid, latitude, longitude, status, driverid, heading) VALUES (?, ?, ?, ?::shuttle_status, ?, ?);",
                 s.shuttleID, s.latitude, s.longitude, s.status, s.driverID, s.heading
         )
+    }
+
+    override fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity {
+        val sa = db.query(
+                "SELECT * FROM shuttle_activity WHERE shuttleid = ?",
+                arrayOf(serviceID),{
+            resultSet, rowNum -> ShuttleActivityEntity(
+                resultSet.getInt("shuttleid"),
+                resultSet.getInt("driverid"),
+                resultSet.getInt("assignmentid"),
+                resultSet.getInt("assignment_stop_id"),
+                resultSet.getInt("Index"),
+                resultSet.getBigDecimal("latitude"),
+                resultSet.getBigDecimal("longitude"),
+                resultSet.getBigDecimal("heading"),
+                status = ShuttleState.valueOf(resultSet.getString("status"))
+        )
+        }
+        )
+        return sa[0]
     }
 }
