@@ -52,9 +52,17 @@ class SelectAssignmentController(private val authService: AuthenticationService,
     fun selectAssignment(attributes: RedirectAttributes, model: Model, http: HttpServletRequest) : String {
         if (authService.isAuthenticated(http)) {
             if (authService.isShuttleActive(http)) {
-                // TBC : TODO : Check to see if shuttle activity exists.
-                    // TBC : TODO : If so, carry on
-                    // TBC : TODO : If not, throw error and return to menu
+                val userContext = authService.getUserContext(http)
+
+                // TBC : Check to see if shuttle activity exists.
+                // TBC : If not, throw error and return to menu
+                try {
+                    val activity = activeService.retrieveShuttleActivity(userContext.shuttleId)
+                } catch (ex: Exception) {
+                    attributes.addFlashAttribute("error", "Activity does not exist")
+                    return "redirect:/menu"
+                }
+
                 return "select-assignment"
             } else {
                 attributes.addFlashAttribute("error", "You are not currently active")

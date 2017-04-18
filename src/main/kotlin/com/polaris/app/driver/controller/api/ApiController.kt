@@ -39,36 +39,7 @@ class ApiController(private val authService: AuthenticationService,
                 assignments.forEach {
                     val assignment = AssignmentDetailsAdapter()
 
-                    // TODO : Add missing (commented out) fields
-                    assignment.driverId = it.driverID
-                    assignment.shuttleId = it.shuttleID
-//                    assignment.driverName = it.driverName
-//                    assignment.shuttleName = it.shuttleName
-                    assignment.routeId = it.routeID
-                    assignment.routeName = it.routeName ?: "Custom Route"
-                    assignment.startTime = it.startTime
-
-                    val report = AssignmentReport()
-                    report.assignmentId = it.assignmentID
-
-                    val stopAdapters = arrayListOf<AssignmentStopAdapter>()
-                    it.stops.forEach {
-                        val stopAdapter = AssignmentStopAdapter()
-
-                        stopAdapter.assingmentStopId = it.assignmentStopID
-                        stopAdapter.stopId = it.stopID
-                        stopAdapter.order = it.index
-                        stopAdapter.name = it.stopName
-                        stopAdapter.address = it.address
-                        stopAdapter.estArriveTime = it.ETA?.toLocalTime()
-                        stopAdapter.estDepartTime = it.ETD?.toLocalTime()
-                        stopAdapter.actualArriveTime = it.TOA?.toLocalTime()
-                        stopAdapter.actualDepartTime = it.TOD?.toLocalTime()
-
-                        stopAdapters.add(stopAdapter)
-                    }
-                    report.assignmentStops = stopAdapters
-                    assignment.assignmentReport = report
+                    assignment.fromAssignment(it)
 
                     assignmentAdapters.add(assignment)
                 }
@@ -95,36 +66,7 @@ class ApiController(private val authService: AuthenticationService,
                     val assignment = activeService.retrieveAssignment(activity.assignmentID)
                     val assignmentDetails = AssignmentDetailsAdapter()
 
-                    // TODO : Add missing (commented out) fields
-                    assignmentDetails.driverId = assignment.driverID
-                    assignmentDetails.shuttleId = assignment.shuttleID
-//                    assignmentDetails.driverName = assignment.driverName
-//                    assignmentDetails.shuttleName = assignment.shuttleName
-                    assignmentDetails.routeId = assignment.routeID
-                    assignmentDetails.routeName = assignment.routeName ?: "Custom Route"
-                    assignmentDetails.startTime = assignment.startTime
-
-                    val report = AssignmentReport()
-                    report.assignmentId = assignment.assignmentID
-
-                    val stopAdapters = arrayListOf<AssignmentStopAdapter>()
-                    assignment.stops.forEach {
-                        val stopAdapter = AssignmentStopAdapter()
-
-                        stopAdapter.assingmentStopId = it.assignmentStopID
-                        stopAdapter.stopId = it.stopID
-                        stopAdapter.order = it.index
-                        stopAdapter.name = it.stopName
-                        stopAdapter.address = it.address
-                        stopAdapter.estArriveTime = it.ETA?.toLocalTime()
-                        stopAdapter.estDepartTime = it.ETD?.toLocalTime()
-                        stopAdapter.actualArriveTime = it.TOA?.toLocalTime()
-                        stopAdapter.actualDepartTime = it.TOD?.toLocalTime()
-
-                        stopAdapters.add(stopAdapter)
-                    }
-                    report.assignmentStops = stopAdapters
-                    assignmentDetails.assignmentReport = report
+                    assignmentDetails.fromAssignment(assignment)
 
                     return ResponseEntity(assignmentDetails, HttpStatus.OK)
                 }
@@ -156,10 +98,17 @@ class ApiController(private val authService: AuthenticationService,
                         shuttleActivityAdapter.status
                         )
 
-                // TBC : TODO : Return the assignment as the response from this. On client check if different from client version.
-                val currentAssignment = AssignmentDetailsAdapter()
+                val activity = onRouteService.retrieveShuttleActivity(userContext.shuttleId)
+                var assignmentDetails: AssignmentDetailsAdapter? = null
 
-                return ResponseEntity(currentAssignment, HttpStatus.OK)
+                if (activity.assignmentID != 0) {
+                    val assignment = activeService.retrieveAssignment(activity.assignmentID)
+
+                    assignmentDetails = AssignmentDetailsAdapter()
+                    assignmentDetails.fromAssignment(assignment)
+                }
+
+                return ResponseEntity(assignmentDetails, HttpStatus.OK)
             } else {
                 return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
             }

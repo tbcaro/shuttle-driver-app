@@ -8,6 +8,7 @@ import com.polaris.app.driver.repository.entity.StatusCheckEntity
 import com.polaris.app.driver.service.bo.UpdateShuttle
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Component
@@ -30,7 +31,8 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
                     )
                 }
         )
-        if (prevState[0].status != shuttle.status){
+
+        if (prevState.isNotEmpty() || prevState[0].status != shuttle.status) {
             if (prevState[0].index != shuttle.index){
                 return UpdateType.DEPART
             }
@@ -47,13 +49,13 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
         if (type == UpdateType.ARRIVE) {
             db.update(
                 "UPDATE assignment_stop SET timeofarrival = ? WHERE assignmentid = ? AND \"Index\" = ?;",
-                LocalDateTime.now(), shuttle.assignmentID, shuttle.index
+                Timestamp.valueOf(LocalDateTime.now()), shuttle.assignmentID, shuttle.index
             )
         }
         else if (type == UpdateType.DEPART) {
             db.update(
                 "UPDATE assignment_stop SET timeofdeparture = ? WHERE assignmentid = ? AND \"Index\" = ?;",
-                LocalDateTime.now(), shuttle.assignmentID, shuttle.index
+                Timestamp.valueOf(LocalDateTime.now()), shuttle.assignmentID, shuttle.index
             )
         }
     }
