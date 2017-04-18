@@ -58,7 +58,7 @@ class ApiController(private val authService: AuthenticationService,
                         stopAdapter.assingmentStopId = it.assignmentStopID
                         stopAdapter.stopId = it.stopID
                         stopAdapter.order = it.index
-                        //stopAdapter.name = it.stopName
+                        stopAdapter.name = it.stopName
                         stopAdapter.address = it.address
                         stopAdapter.estArriveTime = it.ETA?.toLocalTime()
                         stopAdapter.estDepartTime = it.ETD?.toLocalTime()
@@ -114,7 +114,7 @@ class ApiController(private val authService: AuthenticationService,
                         stopAdapter.assingmentStopId = it.assignmentStopID
                         stopAdapter.stopId = it.stopID
                         stopAdapter.order = it.index
-                        //stopAdapter.name = it.stopName
+                        stopAdapter.name = it.stopName
                         stopAdapter.address = it.address
                         stopAdapter.estArriveTime = it.ETA?.toLocalTime()
                         stopAdapter.estDepartTime = it.ETD?.toLocalTime()

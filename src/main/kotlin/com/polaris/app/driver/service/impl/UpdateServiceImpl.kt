@@ -29,7 +29,6 @@ class UpdateServiceImpl(val updateRepository: UpdateRepository): UpdateService{
                 shuttleID = sae.shuttleID,
                 driverID = sae.driverID,
                 assignmentID = sae.assignmentID,
-                assignmentStopID = sae.assignmentStopID,
                 index = sae.index,
                 latitude = sae.latitude,
                 longitude = sae.longitude,

@@ -7,8 +7,11 @@ import com.polaris.app.driver.repository.entity.AssignmentStopEntity
 import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
 import java.sql.Date
+import java.sql.Timestamp
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 @Component
@@ -35,28 +38,49 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
     }
 
     override fun findAssignmentStops(assignmentID: Int): List<AssignmentStopEntity> {
-        val stops = db.query(
-                "SELECT * FROM assignment_stop " +
-                        "LEFT OUTER JOIN stop ON (stop.\"ID\" = assignment_stop.stopid) " +
-                        "WHERE assignmentid = ? ORDER BY \"Index\";",
-                arrayOf(assignmentID),
-                {
-                    resultSet, rowNum -> AssignmentStopEntity(
-                        resultSet.getInt("assignment_stop_id"),
-                        resultSet.getInt("assignmentid"),
-                        resultSet.getInt("Index"),
-                        resultSet.getTimestamp("estimatedtimeofarrival")?.toLocalDateTime(),
-                        resultSet.getTimestamp("estimatedtimeofdeparture")?.toLocalDateTime(),
-                        resultSet.getTimestamp("timeofarrival")?.toLocalDateTime(),
-                        resultSet.getTimestamp("timeofdeparture")?.toLocalDateTime(),
-                        resultSet.getInt("stopid"),
-                        resultSet.getString("address"),
-                        resultSet.getBigDecimal("latitude"),
-                        resultSet.getBigDecimal("longitude")
-                    )
-                }
+        val rows = db.queryForList(
+                "SELECT * FROM assignment_stop LEFT OUTER JOIN stop ON (assignment_stop.stopid = stop.\"ID\") WHERE assignmentid = ? ORDER BY \"Index\";",
+                assignmentID
         )
-        return stops
+
+        val assignmentStopEntities = arrayListOf<AssignmentStopEntity>()
+        rows.forEach {
+            var latitude = BigDecimal("0")
+            var longitude = BigDecimal("0")
+            var name = ""
+            var address = ""
+            var stopId = (it["stopid"]?.let { it as Int })
+
+            if (stopId == null) {
+                latitude = (it["assignment_stop.latitude"]?.let { it as BigDecimal }) ?: BigDecimal("0")
+                longitude = (it["assignment_stop.longitude"]?.let { it as BigDecimal }) ?: BigDecimal("0")
+                address = (it["assignment_stop.address"]?.let { it as String }) ?: ""
+                name = "Custom Stop"
+            } else {
+                latitude = (it["stop.latitude"]?.let { it as BigDecimal }) ?: BigDecimal("0")
+                longitude = (it["stop.longitude"]?.let { it as BigDecimal }) ?: BigDecimal("0")
+                address = (it["stop.address"]?.let { it as String }) ?: ""
+                name = (it["Name"]?.let { it as String }) ?: ""
+            }
+
+            val assignmentStop = AssignmentStopEntity(
+                    assignmentStopID = (it["assignment_stop_id"]?.let { it as Int }) ?: 0,
+                    assignmentID = (it["assignmentid"]?.let { it as Int }) ?: 0,
+                    index = (it["index"]?.let { it as Int }) ?: 0,
+                    ETA = (it["estimatedtimeofarrival"]?.let { it as Timestamp })?.toLocalDateTime(),
+                    ETD = (it["estimatedtimeofdeparture"]?.let { it as Timestamp })?.toLocalDateTime(),
+                    TOA = (it["timeofarrival"]?.let { it as Timestamp })?.toLocalDateTime(),
+                    TOD = (it["timeofdeparture"]?.let { it as Timestamp })?.toLocalDateTime(),
+                    stopID = stopId,
+                    stopName = name,
+                    address = address,
+                    latitude = latitude,
+                    longitude = longitude
+            )
+
+            assignmentStopEntities.add(assignmentStop)
+        }
+        return assignmentStopEntities
     }
 
     override fun beginRoute(shuttleID: Int, assignmentID: Int) {
@@ -65,12 +89,20 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                 assignmentID
         )
         db.update(
-                "UPDATE shuttle_activity SET status = 'DRIVING' AND assignmentid = ? WHERE shuttleid = ?;",
+                "UPDATE shuttle_activity SET status = 'DRIVING', assignmentid = ? WHERE shuttleid = ?;",
                 assignmentID, shuttleID
         )
     }
 
     override fun endService(shuttleID: Int) {
+        val activity = this.findShuttleActivity(shuttleID)
+
+        if (activity.assignmentID != null) {
+            db.update(
+                    "UPDATE assignment SET status = 'SCHEDULED' WHERE assignmentid = ?;",
+                    activity.assignmentID
+            )
+        }
         db.update(
                 "DELETE FROM shuttle_activity WHERE shuttleid = ?;",
                 shuttleID
@@ -108,7 +140,6 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                 resultSet.getInt("shuttleid"),
                 resultSet.getInt("driverid"),
                 resultSet.getInt("assignmentid"),
-                resultSet.getInt("assignment_stop_id"),
                 resultSet.getInt("Index"),
                 resultSet.getBigDecimal("latitude"),
                 resultSet.getBigDecimal("longitude"),

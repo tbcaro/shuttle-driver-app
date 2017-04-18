@@ -25,6 +25,7 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
                     TOA = it.TOA,
                     TOD = it.TOD,
                     stopID = it.stopID,
+                    stopName = it.stopName,
                     address = it.address,
                     latitude = it.latitude,
                     longitude = it.longitude
@@ -71,6 +72,7 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
                         TOA = it.TOA,
                         TOD = it.TOD,
                         stopID = it.stopID,
+                        stopName = it.stopName,
                         address = it.address,
                         latitude = it.latitude,
                         longitude = it.longitude
@@ -100,7 +102,6 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
                 shuttleID = sae.shuttleID,
                 driverID = sae.driverID,
                 assignmentID = sae.assignmentID,
-                assignmentStopID = sae.assignmentStopID,
                 index = sae.index,
                 latitude = sae.latitude,
                 longitude = sae.longitude,

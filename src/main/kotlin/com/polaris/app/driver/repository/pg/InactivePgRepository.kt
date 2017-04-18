@@ -67,7 +67,6 @@ class InactivePgRepository(val db: JdbcTemplate): InactiveRepository {
                 resultSet.getInt("shuttleid"),
                 resultSet.getInt("driverid"),
                 resultSet.getInt("assignmentid"),
-                resultSet.getInt("assignment_stop_id"),
                 resultSet.getInt("Index"),
                 resultSet.getBigDecimal("latitude"),
                 resultSet.getBigDecimal("longitude"),

@@ -7,7 +7,6 @@ data class ShuttleActivity(
         val shuttleID: Int,
         val driverID: Int,
         val assignmentID: Int,
-        val assignmentStopID: Int,
         val index: Int,
         val latitude: BigDecimal,
         val longitude: BigDecimal,
