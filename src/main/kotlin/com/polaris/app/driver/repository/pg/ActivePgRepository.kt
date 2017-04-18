@@ -7,15 +7,16 @@ import com.polaris.app.driver.repository.entity.AssignmentStopEntity
 import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
+import java.sql.Date
 import java.time.LocalDate
 
 
 @Component
 class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
-    override fun findAssignment(driverID: Int, shuttleID: Int, startDate: LocalDate): AssignmentEntity {
+    override fun findAssignment(assignmentID: Int): AssignmentEntity {
         val assignments = db.query(
-                "SELECT * FROM assignment WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND isarchived = false ORDER BY starttime;",
-                arrayOf(driverID, shuttleID, startDate),
+                "SELECT * FROM assignment WHERE assignmentid = ? AND isarchived = false",
+                arrayOf(assignmentID),
                 {
                     resultSet, rowNum -> AssignmentEntity(
                         resultSet.getInt("assignmentid"),
@@ -35,17 +36,19 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
 
     override fun findAssignmentStops(assignmentID: Int): List<AssignmentStopEntity> {
         val stops = db.query(
-                "SELECT * FROM assignment_stop WHERE assignmentid = ? ORDER BY \"Index\";",
+                "SELECT * FROM assignment_stop " +
+                        "LEFT OUTER JOIN stop ON (stop.\"ID\" = assignment_stop.stopid) " +
+                        "WHERE assignmentid = ? ORDER BY \"Index\";",
                 arrayOf(assignmentID),
                 {
                     resultSet, rowNum -> AssignmentStopEntity(
                         resultSet.getInt("assignment_stop_id"),
                         resultSet.getInt("assignmentid"),
                         resultSet.getInt("Index"),
-                        resultSet.getTimestamp("estimatedtimeofarrival").toLocalDateTime(),
-                        resultSet.getTimestamp("estimatedtimeofdeparture").toLocalDateTime(),
-                        resultSet.getTimestamp("timeofarrival").toLocalDateTime(),
-                        resultSet.getTimestamp("timeofdeparture").toLocalDateTime(),
+                        resultSet.getTimestamp("estimatedtimeofarrival")?.toLocalDateTime(),
+                        resultSet.getTimestamp("estimatedtimeofdeparture")?.toLocalDateTime(),
+                        resultSet.getTimestamp("timeofarrival")?.toLocalDateTime(),
+                        resultSet.getTimestamp("timeofdeparture")?.toLocalDateTime(),
                         resultSet.getInt("stopid"),
                         resultSet.getString("address"),
                         resultSet.getBigDecimal("latitude"),
@@ -76,8 +79,10 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
 
     override fun findAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<AssignmentEntity> {
         val assignments = db.query(
-                "SELECT * FROM assignment WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND isarchived = false ORDER BY starttime;",
-                arrayOf(driverID, shuttleID, startDate),
+                "SELECT * FROM assignment " +
+                        "LEFT OUTER JOIN route ON (route.\"ID\" = assignment.routeid) " +
+                        "WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND assignment.isarchived = false ORDER BY starttime;",
+                arrayOf(driverID, shuttleID, Date.valueOf(startDate)),
                 {
                     resultSet, rowNum -> AssignmentEntity(
                         resultSet.getInt("assignmentid"),

@@ -6,7 +6,7 @@ import com.polaris.app.driver.repository.entity.ShuttleActivityEntity
 import java.time.LocalDate
 
 interface ActiveRepository{
-    fun findAssignment(driverID: Int, shuttleID: Int, startDate: LocalDate): AssignmentEntity
+    fun findAssignment(assignmentID: Int): AssignmentEntity
     fun findAssignmentStops(assignmentID: Int): List<AssignmentStopEntity>
     fun beginRoute(shuttleID: Int, assignmentID: Int)
     fun endService(shuttleID: Int)

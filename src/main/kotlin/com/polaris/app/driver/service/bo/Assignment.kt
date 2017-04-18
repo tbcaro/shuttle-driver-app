@@ -11,7 +11,7 @@ data class Assignment(
         val routeID: Int,
         val startTime: LocalTime,
         val startDate: LocalDate,
-        val routeName: String,
+        val routeName: String?,
         val status: String,
         val stops: List<Stop>
 )

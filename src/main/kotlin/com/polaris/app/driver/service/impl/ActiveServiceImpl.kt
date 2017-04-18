@@ -10,8 +10,8 @@ import com.polaris.app.driver.service.bo.Stop
 import java.time.LocalDate
 
 class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
-    override fun retrieveAssignment(driverID: Int, shuttleID: Int, startDate: LocalDate): Assignment {
-        val a = this.activeRepository.findAssignment(driverID, shuttleID, startDate)
+    override fun retrieveAssignment(assignmentID: Int): Assignment {
+        val a = this.activeRepository.findAssignment(assignmentID)
         val assignmentStops = arrayListOf<Stop>()
         val stopEntities = this.activeRepository.findAssignmentStops(a.assignmentID)
 
