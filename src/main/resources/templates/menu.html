@@ -16,6 +16,9 @@
         <div class="col-12">
           <h1 class="text-center h1">Menu</h1>
         </div>
+        <div th:if="${error} != null">
+          <div th:text="${error}" class="alert alert-danger"></div>
+        </div>
       </div>
       <div th:if="${isInService == false}">
         <div class="row">

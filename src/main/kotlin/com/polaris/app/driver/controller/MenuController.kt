@@ -2,37 +2,41 @@ package com.polaris.app.driver.controller
 
 import com.polaris.app.driver.controller.exception.AuthenticationException
 import com.polaris.app.driver.service.AuthenticationService
+import com.polaris.app.driver.service.InactiveService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 @Controller
-class MenuController(private val authService: AuthenticationService) {
+class MenuController(private val authService: AuthenticationService, private val inactiveService: InactiveService) {
 
     @RequestMapping("/menu")
-    fun menu(model: Model, http: HttpServletRequest) : String {
+    fun menu(attributes: RedirectAttributes, model: Model, http: HttpServletRequest) : String {
+        attributes.asMap().forEach { model.addAttribute(it.key, it.value) }
         if (authService.isAuthenticated(http)) {
+            val userContext = authService.getUserContext(http)
+            val shuttles = inactiveService.retrieveShuttles(userContext.serviceId)
+            var shuttleOptions: MutableMap<Int, String> = HashMap()
 
-            // TBC : TODO : Check to see if user has an "shuttle activity" associated with them
-                // TBC : TODO : If so, check to see if that shuttle activity exists.
-                    // TBC : TODO : If it does, set a flad so that the "Go into service button" is "Resume service"
-                    // TBC : TODO : If it doesn't, delete the shuttle activity from their session.
+            shuttles.forEach {
+                shuttleOptions.put(it.shuttleID, it.shuttleName)
+            }
+
+            model.addAttribute("shuttleOptions", shuttleOptions)
+
             if (authService.isShuttleActive(http)) {
-                model.addAttribute("isInService", true)
+                val shuttleActivityExists = true // TBC : TODO : check to see if that shuttle activity exists.
+
+                if (shuttleActivityExists)
+                    model.addAttribute("isInService", true)
+                else
+                    null// TBC : TODO : If it doesn't, delete the shuttle activity from their session.
             } else {
                 model.addAttribute("isInService", false)
             }
-
-            // TBC : Fetch shuttle options
-            var shuttleOptions: MutableMap<Int, String> = HashMap()
-
-            shuttleOptions.put(1, "Shuttle 1A")
-            shuttleOptions.put(2, "Shuttle 2B")
-            shuttleOptions.put(3, "Shuttle 3C")
-
-            model.addAttribute("shuttleOptions", shuttleOptions)
             return "menu"
         } else throw AuthenticationException("Error: user logged out")
     }
