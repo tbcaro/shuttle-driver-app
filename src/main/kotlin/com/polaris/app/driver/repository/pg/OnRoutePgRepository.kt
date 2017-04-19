@@ -6,6 +6,7 @@ import com.polaris.app.driver.repository.OnRouteRepository
 import com.polaris.app.driver.repository.entity.*
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Component
@@ -78,7 +79,7 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
                 assignmentid
         )
         db.update(
-                "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
+                "UPDATE shuttle_activity SET status = 'ACTIVE', assignmentid = null WHERE assignmentid = ?;",
                 assignmentid
         )
     }
@@ -89,7 +90,7 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
                 assignmentid
         )
         db.update(
-                "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null WHERE assignmentid = ?;",
+                "UPDATE shuttle_activity SET status = 'ACTIVE', assignmentid = null WHERE assignmentid = ?;",
                 assignmentid
         )
     }
@@ -111,16 +112,17 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
         return true
     }
 
-    override fun endAssignmentWithTime(assignmentid: Int) {
-        db.update(
-                "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
-                assignmentid
-        )
-        db.update(
-                "UPDATE shuttle_activity SET status = 'ACTIVE' AND assignmentid = null AND timeofarrival = ? WHERE assignmentid = ?;",
-                LocalDateTime.now(), assignmentid
-        )
-    }
+    // TODO : Tyler check this out? What was this supposed to do? There is no timeofarrival field in activity?
+//    override fun endAssignmentWithTime(assignmentid: Int) {
+//        db.update(
+//                "UPDATE assignment SET status = 'COMPLETED' WHERE assignmentid = ?;",
+//                assignmentid
+//        )
+//        db.update(
+//                "UPDATE shuttle_activity SET status = 'ACTIVE', assignmentid = null AND timeofarrival = ? WHERE assignmentid = ?;",
+//                Timestamp.valueOf(LocalDateTime.now()), assignmentid
+//        )
+//    }
 
     override fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity {
         val sa = db.query(

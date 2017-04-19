@@ -14,6 +14,6 @@ interface OnRouteRepository{
     fun endAssignment(assignmentid: Int)
     fun earlyEndAssignment(assignmentid: Int)
     fun checkAssignmentStatus(assignmentid: Int): Boolean
-    fun endAssignmentWithTime(assignmentid: Int)
+//    fun endAssignmentWithTime(assignmentid: Int)
     fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity
 }

@@ -99,7 +99,7 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
 
         if (activity.assignmentID != null) {
             db.update(
-                    "UPDATE assignment SET status = 'SCHEDULED' WHERE assignmentid = ?;",
+                    "UPDATE assignment SET status = 'UNFINISHED' WHERE assignmentid = ?;",
                     activity.assignmentID
             )
         }
@@ -113,7 +113,7 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
         val assignments = db.query(
                 "SELECT * FROM assignment " +
                         "LEFT OUTER JOIN route ON (route.\"ID\" = assignment.routeid) " +
-                        "WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND status = 'SCHEDULED' AND assignment.isarchived = false ORDER BY starttime;",
+                        "WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND (status = 'SCHEDULED' OR status = 'UNFINISHED') AND assignment.isarchived = false ORDER BY starttime;",
                 arrayOf(driverID, shuttleID, Date.valueOf(startDate)),
                 {
                     resultSet, rowNum -> AssignmentEntity(
