@@ -56,11 +56,11 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
 
     override fun retrieveAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<Assignment> {
         val a = this.activeRepository.findAssignments(driverID, shuttleID, startDate)
-        val assignmentStops = arrayListOf<Stop>()
         val assignments = arrayListOf<Assignment>()
 
         a.forEach{
             val stopEntities = this.activeRepository.findAssignmentStops(it.assignmentID)
+            val assignmentStops = arrayListOf<Stop>()
 
             stopEntities.forEach{
                 val stop = Stop(
