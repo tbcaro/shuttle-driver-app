@@ -103,13 +103,17 @@ function OnAssignmentApp() {
             // TBC : Check assignment for differences and if differences exist, alert driver
             var assignmentData = response.data;
             if (assignmentChanged(assignmentData)) {
-              alert('Assignment has been updated by dispatcher.');
               assignment = assignmentData;
+
+              alert('Assignment has been updated by dispatcher.');
               checkPageControlsEnabled();
               bindAssignmentData();
               bindCurrentStatus();
               bindBtnChangeStatusData();
+            } else {
+              assignment = assignmentData;
             }
+
           })
           .catch(function(error) {
             console.log(error);
