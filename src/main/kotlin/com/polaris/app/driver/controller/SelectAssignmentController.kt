@@ -45,7 +45,7 @@ class SelectAssignmentController(private val authService: AuthenticationService,
 
             return "redirect:/select-assignment"
 
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 
     @RequestMapping("/select-assignment")
@@ -68,7 +68,7 @@ class SelectAssignmentController(private val authService: AuthenticationService,
                 attributes.addFlashAttribute("error", "You are not currently active")
                 return "redirect:/menu"
             }
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 
     @RequestMapping("/deactivate")
@@ -84,6 +84,6 @@ class SelectAssignmentController(private val authService: AuthenticationService,
             }
 
             return "redirect:/menu"
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 }
