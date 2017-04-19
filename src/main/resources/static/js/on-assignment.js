@@ -100,13 +100,53 @@ function OnAssignmentApp() {
       axios.post('/api/postActivity', shuttleActivity)
           .then(function(response) {
             console.log(response);
-            // TBC : TODO : Check assignment for differences and if differences exist, alert driver
-            assignment = response.data;
+            // TBC : Check assignment for differences and if differences exist, alert driver
+            var assignmentData = response.data;
+            if (assignmentChanged(assignmentData)) {
+              alert('Assignment has been updated by dispatcher.');
+              assignment = assignmentData;
+              checkPageControlsEnabled();
+              bindAssignmentData();
+              bindCurrentStatus();
+              bindBtnChangeStatusData();
+            }
           })
           .catch(function(error) {
             console.log(error);
           });
     });
+  };
+
+  var assignmentChanged = function(assignmentData) {
+    if (assignmentData.shuttleId != assignmentData.shuttleId) return true;
+    if (assignmentData.shuttleName != assignmentData.shuttleName) return true;
+    if (assignmentData.driverId != assignmentData.driverId) return true;
+    if (assignmentData.driverName != assignmentData.driverName) return true;
+    if (assignmentData.routeId != assignmentData.routeId) return true;
+    if (assignmentData.routeName != assignmentData.routeName) return true;
+    if (timeUtils.formatTime(assignmentData.startTime) != timeUtils.formatTime(assignmentData.startTime)) return true;
+
+    if (assignmentData.assignmentReport != null) {
+      if (assignment.assignmentReport.assignmentId != assignmentData.assignmentReport.assignmentId) return true;
+      if (assignment.assignmentReport.assignmentStops.length != assignmentData.assignmentReport.assignmentStops.length) {
+        return true;
+      } else {
+        for (var i = 0; i < assignmentData.assignmentReport.assignmentStops.length; i++) {
+          var oldStop = assignment.assignmentReport.assignmentStops[i];
+          var newStop = assignmentData.assignmentReport.assignmentStops[i];
+
+          if(oldStop.assingmentStopId != newStop.assingmentStopId) return true;
+          if(oldStop.stopId != newStop.stopId) return true;
+          if(oldStop.order != newStop.order) return true;
+          if(oldStop.name != newStop.name) return true;
+          if(oldStop.address != newStop.address) return true;
+          if(timeUtils.formatTime(oldStop.estArriveTime) != timeUtils.formatTime(newStop.estArriveTime)) return true;
+          if(timeUtils.formatTime(oldStop.estDepartTime) != timeUtils.formatTime(newStop.estDepartTime)) return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   var checkPageControlsEnabled = function() {
