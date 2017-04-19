@@ -38,6 +38,6 @@ class MenuController(private val authService: AuthenticationService, private val
                 model.addAttribute("isInService", false)
             }
             return "menu"
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 }

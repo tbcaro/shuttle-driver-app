@@ -39,7 +39,7 @@ class OnAssignmentController(private val authService: AuthenticationService,
             } else {
                 return "redirect:/menu"
             }
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 
     @RequestMapping("/on-assignment")
@@ -60,7 +60,7 @@ class OnAssignmentController(private val authService: AuthenticationService,
             } else {
                 return "redirect:/menu"
             }
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 
     @RequestMapping("/end-assignment")
@@ -87,7 +87,7 @@ class OnAssignmentController(private val authService: AuthenticationService,
             } else {
                 return "redirect:/menu"
             }
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 
     @RequestMapping("/finish-assignment")
@@ -114,6 +114,6 @@ class OnAssignmentController(private val authService: AuthenticationService,
             } else {
                 return "redirect:/menu"
             }
-        } else throw AuthenticationException("Error: user logged out")
+        } else throw AuthenticationException()
     }
 }

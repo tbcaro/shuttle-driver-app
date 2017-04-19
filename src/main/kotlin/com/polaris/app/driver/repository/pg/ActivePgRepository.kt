@@ -124,7 +124,7 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                         resultSet.getInt("routeid"),
                         resultSet.getTimestamp("starttime").toLocalDateTime().toLocalTime(),
                         resultSet.getTimestamp("startdate").toLocalDateTime().toLocalDate(),
-                        resultSet.getString("routename"),
+                        resultSet.getString("Name"),
                         resultSet.getString("status")
                 )
                 }
