@@ -67,11 +67,16 @@ function SelectAssignmentApp() {
     geoLocator.getLocation().done(function(position){
       shuttleActivity.latitude = position.coords.latitude;
       shuttleActivity.longitude = position.coords.longitude;
-      (position.coords.heading == null) ? shuttleActivity.heading = position.coords.heading : shuttleActivity.heading = 0;
+      (position.coords.heading == null || isNaN(position.coords.heading)) ? shuttleActivity.heading = position.coords.heading : shuttleActivity.heading = 0;
       shuttleActivity.status = 'ACTIVE';
 
       axios.post('/api/postActivity', shuttleActivity)
           .then(function(response) {
+            alert(
+                "lat: " + shuttleActivity.latitude + "\n" +
+                "long: " + shuttleActivity.longitude + "\n" +
+                "heading: " + shuttleActivity.heading + "\n"
+            );
             console.log(response);
           })
           .catch(function(error) {
