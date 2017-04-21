@@ -6,6 +6,7 @@ function SelectAssignmentApp() {
   var assignmentCursor = 0;
   var driverAssignments = [];
   var timeUtils;
+  var heading = 0;
 
   var elements = { };
 
@@ -61,22 +62,21 @@ function SelectAssignmentApp() {
         alert('something went wrong: \n\n' + ex.message);
       }
     });
+
+    Compass.watch(function (_heading) {
+      heading = _heading;
+    });
   };
 
   var postActivity = function() {
     geoLocator.getLocation().done(function(position){
       shuttleActivity.latitude = position.coords.latitude;
       shuttleActivity.longitude = position.coords.longitude;
-      (position.coords.heading == null || isNaN(position.coords.heading)) ? shuttleActivity.heading = 0 : shuttleActivity.heading = position.coords.heading;
       shuttleActivity.status = 'ACTIVE';
+      shuttleActivity.heading = heading;
 
       axios.post('/api/postActivity', shuttleActivity)
           .then(function(response) {
-            alert(
-                "lat: " + shuttleActivity.latitude + "\n" +
-                "long: " + shuttleActivity.longitude + "\n" +
-                "heading: " + position.coords.heading
-            );
             console.log(response);
           })
           .catch(function(error) {
