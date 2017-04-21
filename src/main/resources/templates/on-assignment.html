@@ -85,12 +85,17 @@
           <button id="btn-change-status" class="btn btn-lg p-4"></button>
         </div>
       </div>
+      <div class="row">
+        <div id="debug-lat" class="col-4 text-center"></div>
+        <div id="debug-long" class="col-4 text-center"></div>
+        <div id="debug-heading" class="col-4 text-center"></div>
+      </div>
     </div>
   </div>
 
   <div th:replace="fragments/scripts"></div>
   <script src="/js/geolocation.js"></script>
-  <script src="ai.github.com/compass.js/compass.js."></script>
+  <script src="https://ai.github.io/compass.js/compass.js"></script>
   <script src="/js/on-assignment.js"></script>
   <script>
     $(document).ready(function() {
