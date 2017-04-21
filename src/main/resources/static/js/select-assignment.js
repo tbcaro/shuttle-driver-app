@@ -67,7 +67,7 @@ function SelectAssignmentApp() {
     geoLocator.getLocation().done(function(position){
       shuttleActivity.latitude = position.coords.latitude;
       shuttleActivity.longitude = position.coords.longitude;
-      (position.coords.heading == null || isNaN(position.coords.heading)) ? shuttleActivity.heading = position.coords.heading : shuttleActivity.heading = 0;
+      (position.coords.heading == null || isNaN(position.coords.heading)) ? shuttleActivity.heading = 0 : shuttleActivity.heading = position.coords.heading;
       shuttleActivity.status = 'ACTIVE';
 
       axios.post('/api/postActivity', shuttleActivity)
@@ -75,7 +75,7 @@ function SelectAssignmentApp() {
             alert(
                 "lat: " + shuttleActivity.latitude + "\n" +
                 "long: " + shuttleActivity.longitude + "\n" +
-                "heading: " + shuttleActivity.heading + "\n"
+                "heading: " + position.coords.heading
             );
             console.log(response);
           })
