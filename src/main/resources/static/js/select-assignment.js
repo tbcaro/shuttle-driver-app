@@ -67,7 +67,7 @@ function SelectAssignmentApp() {
     geoLocator.getLocation().done(function(position){
       shuttleActivity.latitude = position.coords.latitude;
       shuttleActivity.longitude = position.coords.longitude;
-      shuttleActivity.heading = position.coords.heading || 0;
+      (position.coords.heading == null) ? shuttleActivity.heading = position.coords.heading : shuttleActivity.heading = 0;
       shuttleActivity.status = 'ACTIVE';
 
       axios.post('/api/postActivity', shuttleActivity)
