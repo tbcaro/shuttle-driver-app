@@ -9,6 +9,7 @@ function OnAssignmentApp() {
   var stopCursor = 0;
   var assignment = null;
   var timeUtils;
+  var heading = 0;
 
   var elements = { };
 
@@ -89,13 +90,17 @@ function OnAssignmentApp() {
         bindBtnChangeStatusData();
       }
     });
+
+    Compass.watch(function (_heading) {
+      heading = _heading;
+    });
   };
 
   var postActivity = function() {
     geoLocator.getLocation().done(function(position){
       shuttleActivity.latitude = position.coords.latitude;
       shuttleActivity.longitude = position.coords.longitude;
-      shuttleActivity.heading = position.coords.heading || 0;
+      shuttleActivity.heading = heading;
 
       axios.post('/api/postActivity', shuttleActivity)
           .then(function(response) {
