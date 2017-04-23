@@ -6,7 +6,7 @@ function GeoLocator() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
           deferred.resolve(position);
-        }, deferred.reject);
+        }, deferred.reject, { maximumAge: 0, timeout: 30000, enableHighAccuracy: true });
       } else {
         deferred.reject("Your browser does not support geolocation");
       }
