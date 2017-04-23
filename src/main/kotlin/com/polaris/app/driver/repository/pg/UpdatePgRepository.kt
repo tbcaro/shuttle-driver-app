@@ -32,7 +32,7 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
                 }
         )
 
-        if (prevState.isNotEmpty() || prevState[0].status != shuttle.status) {
+        if (prevState.isNotEmpty() && prevState[0].status != shuttle.status) {
             if (prevState[0].index != shuttle.index){
                 return UpdateType.DEPART
             }
@@ -55,15 +55,15 @@ class UpdatePgRepository(val db: JdbcTemplate): UpdateRepository {
         else if (type == UpdateType.DEPART) {
             db.update(
                 "UPDATE assignment_stop SET timeofdeparture = ? WHERE assignmentid = ? AND \"Index\" = ?;",
-                Timestamp.valueOf(LocalDateTime.now()), shuttle.assignmentID, shuttle.index
+                Timestamp.valueOf(LocalDateTime.now()), shuttle.assignmentID, shuttle.index - 1
             )
         }
     }
 
-    override fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity {
+    override fun findShuttleActivity(shuttleID: Int): ShuttleActivityEntity {
         val sa = db.query(
                 "SELECT * FROM shuttle_activity WHERE shuttleid = ?",
-                arrayOf(serviceID),{
+                arrayOf(shuttleID),{
             resultSet, rowNum -> ShuttleActivityEntity(
                 resultSet.getInt("shuttleid"),
                 resultSet.getInt("driverid"),

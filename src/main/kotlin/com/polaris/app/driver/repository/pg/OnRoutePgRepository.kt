@@ -96,20 +96,25 @@ class OnRoutePgRepository(val db: JdbcTemplate): OnRouteRepository{
     }
 
     override fun checkAssignmentStatus(assignmentid: Int): Boolean {
-        val TOA = db.query(
-                "SELECT * FROM assignment_stop WHERE assignmentid = ?",
-                arrayOf(assignmentid),{
-                    resultSet, rowNum -> AssignmentStatusEntity(
-                        resultSet.getInt("timeofarrival")
-                    )
-                }
-        )
-        TOA.forEach {
-            if (it.TOA == null){
-                return false
+        try {
+            val TOA = db.query(
+                    "SELECT * FROM assignment_stop WHERE assignmentid = ?",
+                    arrayOf(assignmentid), {
+                resultSet, rowNum ->
+                AssignmentStatusEntity(
+                        resultSet.getTimestamp("timeofarrival").toLocalDateTime().toLocalTime()
+                )
             }
+            )
+            TOA.forEach {
+                if (it.TOA == null) {
+                    return false
+                }
+            }
+            return true
+        } catch (ex: Exception) {
+            return false
         }
-        return true
     }
 
     // TODO : Tyler check this out? What was this supposed to do? There is no timeofarrival field in activity?

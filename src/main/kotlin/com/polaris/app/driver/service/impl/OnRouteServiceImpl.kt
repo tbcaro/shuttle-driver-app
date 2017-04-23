@@ -54,7 +54,7 @@ class OnRouteServiceImpl(val onRouteRepository: OnRouteRepository): OnRouteServi
             if (this.onRouteRepository.checkAssignmentStatus(assignmentID)) {
                 this.onRouteRepository.endAssignment(assignmentID)
             }
-            this.onRouteRepository.endAssignment(assignmentID)
+            //this.onRouteRepository.endAssignment(assignmentID)
         }
     }
 
