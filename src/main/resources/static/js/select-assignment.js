@@ -75,10 +75,6 @@ function SelectAssignmentApp() {
       shuttleActivity.status = 'ACTIVE';
       shuttleActivity.heading = heading;
 
-      $('#debug-lat').html('lat: ' + shuttleActivity.latitude);
-      $('#debug-long').html('long: ' + shuttleActivity.longitude);
-      $('#debug-heading').html('heading: ' + shuttleActivity.heading);
-
       axios.post('/api/postActivity', shuttleActivity)
           .then(function(response) {
             console.log(response);
