@@ -34,7 +34,7 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
         }
         return Assignment(
                 assignmentID = a.assignmentID,
-                serviceID = a.serviceID,
+                //serviceID = a.serviceID,
                 driverID = a.driverID,
                 shuttleID = a.shuttleID,
                 routeID = a.routeID,
@@ -80,7 +80,7 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
                 assignmentStops.add(stop)
             }
             val assignment = Assignment(
-                    serviceID = it.serviceID,
+                    //serviceID = it.serviceID,
                     assignmentID = it.assignmentID,
                     startDate = it.startDate,
                     startTime = it.startTime,

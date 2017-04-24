@@ -1,6 +1,7 @@
 package com.polaris.app.driver.repository.pg
 
 import com.polaris.app.dispatch.controller.adapter.enums.ShuttleState
+import com.polaris.app.driver.controller.adapter.enums.AssignmentStatus
 import com.polaris.app.driver.repository.ActiveRepository
 import com.polaris.app.driver.repository.entity.AssignmentEntity
 import com.polaris.app.driver.repository.entity.AssignmentStopEntity
@@ -9,9 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import java.sql.Date
+import java.sql.Time
 import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 @Component
@@ -23,14 +26,14 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                 {
                     resultSet, rowNum -> AssignmentEntity(
                         resultSet.getInt("assignmentid"),
-                        resultSet.getInt("serviceid"),
+                        //resultSet.getInt("serviceid"),
                         resultSet.getInt("driverid"),
                         resultSet.getInt("shuttleid"),
                         resultSet.getInt("routeid"),
                         resultSet.getTimestamp("starttime").toLocalDateTime().toLocalTime(),
                         resultSet.getTimestamp("startdate").toLocalDateTime().toLocalDate(),
                         resultSet.getString("routename"),
-                        resultSet.getString("status")
+                        status = AssignmentStatus.valueOf(resultSet.getString("status"))
                     )
                 }
         )
@@ -110,7 +113,48 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
     }
 
     override fun findAssignments(driverID: Int, shuttleID: Int, startDate: LocalDate): List<AssignmentEntity> {
-        val assignments = db.query(
+        val rows = db.queryForList(
+                "SELECT * FROM assignment " +
+                        "LEFT OUTER JOIN route ON (route.\"ID\" = assignment.routeid) " +
+                        "WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND (status = 'SCHEDULED' OR status = 'UNFINISHED') AND assignment.isarchived = false ORDER BY starttime;",
+                driverID, shuttleID, Date.valueOf(startDate)
+        )
+
+        val assignmentEntities = arrayListOf<AssignmentEntity>()
+        rows.forEach {
+            var routeName: String? = null
+            var routeID: Int? = 0
+            var startTime: LocalTime? = null
+            var startDate: LocalDate? = null
+
+            if (it["Name"] != null) routeName = it["Name"] as String
+            else if (it["routename"] != null) routeName = it["routename"] as String
+            if (it["routeid"] != null) routeID = it["routeid"] as Int
+
+            startTime = (it["starttime"]?.let { it as Time })?.toLocalTime()
+            startDate = (it["startdate"]?.let { it as Date})?.toLocalDate()
+
+            val assignmentID: Int = it["assignmentid"] as Int
+            //val serviceID: Int = it["serviceid"] as Int
+            val driverID: Int = it["driverid"] as Int
+            val shuttleID: Int = it["shuttleid"] as Int
+
+            val assignmentEntity = AssignmentEntity(
+                    it["assignmentid"] as Int,
+                    //it["serviceid"] as Int,
+                    it["driverid"] as Int,
+                    it["shuttleid"] as Int,
+                    routeID,
+                    startTime,
+                    startDate,
+                    routeName,
+                    AssignmentStatus.valueOf(it["status"] as String)
+            )
+            assignmentEntities.add(assignmentEntity)
+        }
+        return assignmentEntities
+
+        /*val assignments = db.query(
                 "SELECT * FROM assignment " +
                         "LEFT OUTER JOIN route ON (route.\"ID\" = assignment.routeid) " +
                         "WHERE driverid = ? AND shuttleid = ? AND startdate = ? AND (status = 'SCHEDULED' OR status = 'UNFINISHED') AND assignment.isarchived = false ORDER BY starttime;",
@@ -125,11 +169,11 @@ class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
                         resultSet.getTimestamp("starttime").toLocalDateTime().toLocalTime(),
                         resultSet.getTimestamp("startdate").toLocalDateTime().toLocalDate(),
                         resultSet.getString("Name"),
-                        resultSet.getString("status")
+                        status = AssignmentStatus.valueOf(resultSet.getString("status"))
                 )
                 }
-        )
-        return assignments
+        )*/
+        //return assignments
     }
 
     override fun findShuttleActivity(serviceID: Int): ShuttleActivityEntity {
