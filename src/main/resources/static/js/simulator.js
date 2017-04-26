@@ -165,6 +165,13 @@ function SimulatorApp() {
 
   var saveSimulation = function() {
     log('Saving simulation...');
+    axios.post('/api/saveSimulation', { cycles: recordedSim })
+        .then(function(response) {
+          log('Save successful');
+        })
+        .catch(function(error) {
+          log('Save failed: ' + error.message);
+        });
   };
 
   var stayAlive = function() {

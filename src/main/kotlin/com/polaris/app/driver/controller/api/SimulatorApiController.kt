@@ -1,9 +1,6 @@
 package com.polaris.app.driver.controller.api
 
-import com.polaris.app.driver.controller.adapter.AssignmentDetailsAdapter
-import com.polaris.app.driver.controller.adapter.AssignmentReport
-import com.polaris.app.driver.controller.adapter.AssignmentStopAdapter
-import com.polaris.app.driver.controller.adapter.ShuttleActivityAdapter
+import com.polaris.app.driver.controller.adapter.*
 import com.polaris.app.driver.controller.exception.AuthenticationException
 import com.polaris.app.driver.service.ActiveService
 import com.polaris.app.driver.service.AuthenticationService
@@ -35,7 +32,7 @@ class SimulatorApiController(private val authService: AuthenticationService
     }
 
     @RequestMapping("/saveSimulation")
-    fun saveSimulation(http: HttpServletRequest) : ResponseEntity<Any?> {
+    fun saveSimulation(http: HttpServletRequest, @RequestBody saveSimAdapter: SaveSimAdapter) : ResponseEntity<Any?> {
         return ResponseEntity(HttpStatus.OK)
     }
 }
