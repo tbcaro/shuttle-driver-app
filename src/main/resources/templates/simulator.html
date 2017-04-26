@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Simulator</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <div th:replace="fragments/styles"></div>
+  <link rel="stylesheet" href="/css/menu.css"/>
+</head>
+<body>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <pre id="simulation-status" class="col-12"></pre>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div>
+            <label>Select Shuttle:</label>
+          </div>
+          <div class="input-group">
+            <select id="shuttle-select" class="form-control">
+              <option value="0"></option>
+              <option th:each="shuttle : ${shuttleOptions}" th:value="${shuttle.key}" th:text="${shuttle.value}">Invalid Shuttle</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary" id="btn-load-simulation">Load Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary" id="btn-post-loaded-simulation">Run Loaded Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div id="status-btns" class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button id="btn-active" class="btn btn-info" data-status="active">Active</button>
+          </div>
+          <div class="input-group">
+            <button id="btn-driving" class="btn btn-success" data-status="driving">Driving</button>
+          </div>
+          <div class="input-group">
+            <button id="btn-at-stop" class="btn btn-warning" data-status="at-stop">At Stop</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary" id="btn-toggle-recording">Begin Recording</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary" id="btn-empty-recorded-simulation">Empty Simulation Cycles</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary" id="btn-save-simulation">Save Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <pre id="simulation-log" class="card" style="height: 150px; overflow: auto;"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/scripts"></div>
+  <script src="/js/simulator.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new SimulatorApp();
+    });
+  </script>
+</body>
+</html>
