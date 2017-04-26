@@ -51,10 +51,10 @@ class OnRouteServiceImpl(val onRouteRepository: OnRouteRepository): OnRouteServi
             this.onRouteRepository.earlyEndAssignment(assignmentID)
         }
         else {
-            if (this.onRouteRepository.checkAssignmentStatus(assignmentID)) {
-                this.onRouteRepository.endAssignment(assignmentID)
+            if (!this.onRouteRepository.checkAssignmentStatus(assignmentID)) {
+                //this.onRouteRepository.endAssignment(assignmentID)
             }
-            //this.onRouteRepository.endAssignment(assignmentID)
+            this.onRouteRepository.endAssignment(assignmentID)
         }
     }
 
