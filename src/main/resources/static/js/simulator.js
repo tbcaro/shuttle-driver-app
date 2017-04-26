@@ -10,14 +10,15 @@ function SimulatorApp() {
   var status = states.idle;
   var recordedSim = [];
   var loadedSim = [];
-  var recordCursor = 0;
   var simCursor = 0;
   var intervalId = null;
   var stayAliveIntervalId = null;
+  var geoLocator = null;
 
   var shuttleId = 0;
   var shuttleName = null;
   var shuttleStatus = null;
+  var heading = 0;
 
   self.initialize = function() {
     elements.simLog = $('#simulation-log');
@@ -37,7 +38,10 @@ function SimulatorApp() {
     elements.btnEmptyRecordedSimulation = $('#btn-empty-recorded-simulation');
     elements.btnSaveSimulation = $('#btn-save-simulation');
 
+    geoLocator = new GeoLocator();
+
     shuttleId = elements.shuttleSelect.val();
+    shuttleName = elements.shuttleSelect.find('option:selected').text();
     shuttleStatus = elements.statusBtns.find('.selected').data('status');
 
     stayAliveIntervalId = setInterval(stayAlive, 5000);
@@ -75,10 +79,12 @@ function SimulatorApp() {
         log('Simulation started...');
         simCursor = 0;
         status = states.simulating;
+        simulateCycle();
         intervalId = setInterval(simulateCycle, 5000);
       } else if (status === states.simulating) {
         log('Simulation stopped');
         status = states.idle;
+        clearInterval(intervalId);
       }
       refreshButtons();
       refreshStatus();
@@ -96,18 +102,19 @@ function SimulatorApp() {
       if (status === states.idle) {
         log('Recording started...');
         status = states.recording;
+        recordCycle();
         intervalId = setInterval(recordCycle, 5000);
       } else if (status === states.recording) {
         log('Recording stopped');
         status = states.idle;
+        clearInterval(intervalId);
       }
       refreshButtons();
       refreshStatus();
     });
 
     elements.btnEmptyRecordedSimulation.on('click', function(){
-      recordedSim.empty();
-      recordCursor = 0;
+      recordedSim = [];
       log('Recorded simulation emptied...');
       refreshButtons();
       refreshStatus();
@@ -118,10 +125,34 @@ function SimulatorApp() {
       refreshButtons();
       refreshStatus();
     });
+
+    Compass.watch(function (_heading) {
+      heading = _heading;
+    });
   };
 
   var recordCycle = function() {
+    geoLocator.getLocation().done(function(position) {
+      var o = {
+        shuttleId: shuttleId,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        heading: heading,
+        status: shuttleStatus
+      };
 
+      recordedSim.push(o);
+      log('cycle added...' +
+          '\nshuttle: ' + o.shuttleId +
+          '\nlat: ' + o.latitude +
+          '\nlong: ' + o.longitude +
+          '\nheading: ' + o.heading +
+          '\nstatus: ' + shuttleStatus
+      );
+
+      refreshButtons();
+      refreshStatus();
+    });
   };
 
   var simulateCycle = function() {
@@ -195,8 +226,7 @@ function SimulatorApp() {
   var refreshStatus = function() {
     var msg = 'Status: ' + status + '...';
 
-    if (status === states.recording)
-      msg += '\n[ ' + recordedSim.length + ' cycles recorded ]';
+    msg += '\n[ ' + recordedSim.length + ' cycles recorded ]';
 
     if (shuttleId != 0)
       msg += '\n[ shuttle id=' + shuttleId + ' : ' + shuttleName + ' selected ]';

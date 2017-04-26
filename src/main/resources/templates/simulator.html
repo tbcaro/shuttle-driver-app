@@ -11,6 +11,14 @@
     .btn.selected, .btn.selected:hover {
       border: 4px solid black;
     }
+
+    .btn {
+      width: 100%;
+    }
+
+    body {
+      overflow: auto;
+    }
   </style>
 </head>
 <body>
@@ -35,44 +43,44 @@
       <div class="row">
         <div class="col-12">
           <div class="input-group">
-            <button class="btn btn-secondary" id="btn-load-simulation" style="display: none;">Load Simulation</button>
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-load-simulation" style="display: none;">Load Simulation</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="input-group">
-            <button class="btn btn-secondary" id="btn-toggle-simulating" style="display: none;">Start Simulation</button>
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-toggle-simulating" style="display: none;">Start Simulation</button>
           </div>
         </div>
       </div>
       <div id="status-btns" class="row">
         <div class="col-12">
           <div class="input-group">
-            <button id="btn-active" class="btn btn-info selected" data-status="ACTIVE" style="display: none;">Active</button>
-            <button id="btn-driving" class="btn btn-success" data-status="DRIVING" style="display: none;">Driving</button>
-            <button id="btn-at-stop" class="btn btn-warning" data-status="AT_STOP" style="display: none;">At Stop</button>
+            <button id="btn-active" class="btn btn-info m-1 selected" data-status="ACTIVE" style="display: none;">Active</button>
+            <button id="btn-driving" class="btn btn-success m-1" data-status="DRIVING" style="display: none;">Driving</button>
+            <button id="btn-at-stop" class="btn btn-warning m-1" data-status="AT_STOP" style="display: none;">At Stop</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="input-group">
-            <button class="btn btn-secondary" id="btn-toggle-recording" style="display: none;">Start Recording</button>
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-toggle-recording" style="display: none;">Start Recording</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="input-group">
-            <button class="btn btn-secondary" id="btn-empty-recorded-simulation" style="display: none;">Empty Simulation Cycles</button>
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-empty-recorded-simulation" style="display: none;">Empty Simulation Cycles</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="input-group">
-            <button class="btn btn-secondary" id="btn-save-simulation" style="display: none;">Save Simulation</button>
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-save-simulation" style="display: none;">Save Simulation</button>
           </div>
         </div>
       </div>
@@ -85,6 +93,8 @@
   </div>
 
   <div th:replace="fragments/scripts"></div>
+  <script src="/js/geolocation.js"></script>
+  <script src="https://ai.github.io/compass.js/compass.js"></script>
   <script src="/js/simulator.js"></script>
   <script>
     $(document).ready(function() {
