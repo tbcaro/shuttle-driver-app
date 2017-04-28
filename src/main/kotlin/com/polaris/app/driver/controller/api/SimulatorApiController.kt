@@ -2,10 +2,7 @@ package com.polaris.app.driver.controller.api
 
 import com.polaris.app.driver.controller.adapter.*
 import com.polaris.app.driver.controller.exception.AuthenticationException
-import com.polaris.app.driver.service.ActiveService
-import com.polaris.app.driver.service.AuthenticationService
-import com.polaris.app.driver.service.OnRouteService
-import com.polaris.app.driver.service.UpdateService
+import com.polaris.app.driver.service.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
@@ -18,7 +15,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/api")
-class SimulatorApiController(private val authService: AuthenticationService
+class SimulatorApiController(private val authService: AuthenticationService, private val simulationService: SimulationService
 ) {
 
     @RequestMapping("/stayAlive")
@@ -27,12 +24,23 @@ class SimulatorApiController(private val authService: AuthenticationService
     }
 
     @RequestMapping("/loadSimulation")
-    fun loadSimulation(http: HttpServletRequest) : ResponseEntity<Any?> {
-        return ResponseEntity(HttpStatus.OK)
+    fun loadSimulation(http: HttpServletRequest, shuttleId: Int) : ResponseEntity<Any?> {
+        try {
+            val simCycles = simulationService.loadSimulation(shuttleId)
+            return ResponseEntity(simCycles, HttpStatus.OK)
+        } catch (ex: Exception) {
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     @RequestMapping("/saveSimulation")
     fun saveSimulation(http: HttpServletRequest, @RequestBody saveSimAdapter: SaveSimAdapter) : ResponseEntity<Any?> {
-        return ResponseEntity(HttpStatus.OK)
+        try {
+            val userContext = authService.getUserContext(http)
+            simulationService.saveSimulation(saveSimAdapter.toSimCycleList(userContext.userId))
+            return ResponseEntity(HttpStatus.OK)
+        } catch (ex: Exception) {
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }
