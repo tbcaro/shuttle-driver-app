@@ -9,9 +9,10 @@ import java.math.BigDecimal
 
 class UpdateServiceImpl(val updateRepository: UpdateRepository): UpdateService{
     override fun updateShuttle(shuttleid: Int, assignmentid: Int, heading: BigDecimal, latitude: BigDecimal, longitude: BigDecimal, index: Int, status: ShuttleState) {
+        val sa = this.updateRepository.findShuttleActivity(shuttleid)
         val shuttle = UpdateShuttle(
                 shuttleID = shuttleid,
-                assignmentID = assignmentid,
+                assignmentID = sa.assignmentID,
                 heading = heading,
                 latitude = latitude,
                 longitude = longitude,

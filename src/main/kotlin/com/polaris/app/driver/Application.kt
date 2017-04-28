@@ -27,6 +27,9 @@ open class Application {
     @Autowired
     lateinit var updateRepo: UpdatePgRepository
 
+    @Autowired
+    lateinit var simRepo: SimulationPgRepository
+
     @Bean
     open fun authService(): AuthenticationService {
         return AuthenticationServiceImpl(userRepo)
@@ -50,6 +53,11 @@ open class Application {
     @Bean
     open fun updateService(): UpdateService {
         return UpdateServiceImpl(updateRepo)
+    }
+
+    @Bean
+    open fun simulationService(): SimulationService {
+        return SimulationServiceImpl(simRepo)
     }
 }
 

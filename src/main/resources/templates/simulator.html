@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Simulator</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <div th:replace="fragments/styles"></div>
+  <style>
+    .btn.selected, .btn.selected:hover {
+      border: 4px solid black;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    body {
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="main" class="align-self-stretch">
+    <div class="container-fluid">
+      <div class="row">
+        <pre id="simulation-status" class="col-12"></pre>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div>
+            <label>Select Shuttle:</label>
+          </div>
+          <div class="input-group">
+            <select id="shuttle-select" class="form-control">
+              <option value="0"></option>
+              <option th:each="shuttle : ${shuttleOptions}" th:value="${shuttle.key}" th:text="${shuttle.value}">Invalid Shuttle</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-load-simulation" style="display: none;">Load Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-toggle-simulating" style="display: none;">Start Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div id="status-btns" class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button id="btn-active" class="btn btn-info m-1 selected" data-status="ACTIVE" style="display: none;">Active</button>
+            <button id="btn-driving" class="btn btn-success m-1" data-status="DRIVING" style="display: none;">Driving</button>
+            <button id="btn-at-stop" class="btn btn-warning m-1" data-status="AT_STOP" style="display: none;">At Stop</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-toggle-recording" style="display: none;">Start Recording</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-empty-recorded-simulation" style="display: none;">Empty Simulation Cycles</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <button class="btn btn-secondary p-3 mx-auto" id="btn-save-simulation" style="display: none;">Save Simulation</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <pre id="simulation-log" class="card" style="height: 150px; overflow: auto;"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/scripts"></div>
+  <script src="/js/geolocation.js"></script>
+  <script src="https://ai.github.io/compass.js/compass.js"></script>
+  <script src="/js/simulator.js"></script>
+  <script>
+    $(document).ready(function() {
+      var app = new SimulatorApp();
+    });
+  </script>
+</body>
+</html>

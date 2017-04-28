@@ -31,7 +31,7 @@ function SelectAssignmentApp() {
     timeUtils = new TimeUtils();
 
     fetchAllAssignments();
-    intervalId = setInterval(postActivity, 5000);
+    intervalId = setInterval(postActivity, 3000);
     bindEventHandlers();
   };
 
