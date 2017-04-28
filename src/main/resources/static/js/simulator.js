@@ -82,9 +82,7 @@ function SimulatorApp() {
         simulateCycle();
         intervalId = setInterval(simulateCycle, 5000);
       } else if (status === states.simulating) {
-        log('Simulation stopped');
-        status = states.idle;
-        clearInterval(intervalId);
+        stopSimulation();
       }
       refreshButtons();
       refreshStatus();
@@ -156,7 +154,44 @@ function SimulatorApp() {
   };
 
   var simulateCycle = function() {
+    var o = loadedSim[simCursor];
 
+    axios.post('/api/postSimulation', o)
+        .then(function(response) {
+          log('activity posted...' +
+              '\nshuttle: ' + o.shuttleId +
+              '\nlat: ' + o.latitude +
+              '\nlong: ' + o.longitude +
+              '\nheading: ' + o.heading +
+              '\nstatus: ' + o.status);
+
+          if (simCursor < loadedSim.length - 1)
+            simCursor++;
+          else
+            simCursor = 0;
+
+          refreshButtons();
+          refreshStatus();
+        })
+        .catch(function(error) {
+          log('Simulation post failed: ' + error.message);
+        });
+  };
+
+  var stopSimulation = function() {
+    axios.get('/api/stopSimulation?shuttleId=' + shuttleId)
+        .then(function(response) {
+          log('Simulation stopped');
+          status = states.idle;
+          simCursor = 0;
+          clearInterval(intervalId);
+
+          refreshButtons();
+          refreshStatus();
+        })
+        .catch(function(error) {
+          log('Simulation stop failed: ' + error.message);
+        });
   };
 
   var loadSimulation = function(){

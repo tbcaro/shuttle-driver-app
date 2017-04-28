@@ -15,7 +15,12 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/api")
-class SimulatorApiController(private val authService: AuthenticationService, private val simulationService: SimulationService
+class SimulatorApiController(private val authService: AuthenticationService,
+                             private val simulationService: SimulationService,
+                             private val updateService: UpdateService,
+                             private val onRouteService: OnRouteService,
+                             private val inactiveService: InactiveService,
+                             private val activeService: ActiveService
 ) {
 
     @RequestMapping("/stayAlive")
@@ -38,6 +43,48 @@ class SimulatorApiController(private val authService: AuthenticationService, pri
         try {
             val userContext = authService.getUserContext(http)
             simulationService.saveSimulation(saveSimAdapter.toSimCycleList(userContext.userId))
+            return ResponseEntity(HttpStatus.OK)
+        } catch (ex: Exception) {
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    @RequestMapping("/postSimulation")
+    fun postActivity(http: HttpServletRequest, @RequestBody shuttleActivityAdapter: ShuttleActivityAdapter) : ResponseEntity<Any?> {
+        if (authService.isAuthenticated(http)) {
+            val userContext = authService.getUserContext(http)
+            var activityExists = false
+
+            shuttleActivityAdapter.driverId = userContext.userId
+
+            try {
+                val activity = onRouteService.retrieveShuttleActivity(shuttleActivityAdapter.shuttleId)
+                activityExists = true
+            } catch (ex: Exception) { }
+
+            if (!activityExists)
+                inactiveService.beginActiveService(shuttleActivityAdapter.shuttleId!!, userContext.userId)
+
+            updateService.updateShuttle(
+                    shuttleActivityAdapter.shuttleId,
+                    shuttleActivityAdapter.assignmentId,
+                    shuttleActivityAdapter.heading,
+                    shuttleActivityAdapter.latitude,
+                    shuttleActivityAdapter.longitude,
+                    shuttleActivityAdapter.currentStopIndex,
+                    shuttleActivityAdapter.status
+            )
+
+            return ResponseEntity(HttpStatus.OK)
+        } else {
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    @RequestMapping("/stopSimulation")
+    fun postActivity(http: HttpServletRequest, shuttleId: Int) : ResponseEntity<Any?> {
+        try {
+            activeService.endService(shuttleId)
             return ResponseEntity(HttpStatus.OK)
         } catch (ex: Exception) {
             return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
