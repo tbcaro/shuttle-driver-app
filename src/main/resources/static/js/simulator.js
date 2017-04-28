@@ -161,6 +161,24 @@ function SimulatorApp() {
 
   var loadSimulation = function(){
     log('Loading simulation...');
+    axios.get('/api/loadSimulation?shuttleId=' + shuttleId)
+        .then(function(response) {
+          if(response.data.length < 1) {
+            if (shuttleId == 0) {
+              throw { message: 'No shuttle selected' };
+            } else {
+              throw { message: 'No Simulation Found' };
+            }
+          } else {
+            loadedSim = response.data;
+            log('Simulation loaded successfully');
+            refreshButtons();
+            refreshStatus();
+          }
+        })
+        .catch(function(error) {
+          log('Simulation load failed: ' + error.message);
+        });
   };
 
   var saveSimulation = function() {
@@ -168,6 +186,8 @@ function SimulatorApp() {
     axios.post('/api/saveSimulation', { cycles: recordedSim })
         .then(function(response) {
           log('Save successful');
+          refreshButtons();
+          refreshStatus();
         })
         .catch(function(error) {
           log('Save failed: ' + error.message);
@@ -210,8 +230,7 @@ function SimulatorApp() {
     } else {
       enable(elements.shuttleSelect);
 
-      if (shuttleId != 0 && loadedSim.length <= 0)
-        elements.btnLoadSimulation.show();
+      elements.btnLoadSimulation.show();
 
       if (loadedSim.length > 0) {
         elements.btnToggleSimulating.show();
