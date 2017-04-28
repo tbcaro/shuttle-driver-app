@@ -11,7 +11,7 @@ class SimulationPgRepository(val db: JdbcTemplate) : SimulationRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun findSimCyclesByShuttleId(shuttleId: Int) {
+    override fun findSimCyclesByShuttleId(shuttleId: Int): List<SimCycleEntity> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
