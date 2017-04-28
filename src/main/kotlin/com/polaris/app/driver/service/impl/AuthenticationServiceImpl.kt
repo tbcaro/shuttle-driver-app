@@ -56,7 +56,7 @@ class AuthenticationServiceImpl(val userRepository: UserRepository) : Authentica
             session.setAttribute(it.key, it.value)
         }
 
-        session.maxInactiveInterval = 3 * 60
+        session.maxInactiveInterval = 5 * 60
     }
 
     override fun invalidateSession(http: HttpServletRequest) {
