@@ -20,7 +20,7 @@ class SimulationPgRepository(val db: JdbcTemplate) : SimulationRepository {
 
     override fun findSimCyclesByShuttleId(shuttleId: Int): List<SimCycleEntity> {
         val simCycles = db.query(
-                "SELECT * FROM simulation_cycle WHERE shuttleId = ?",
+                "SELECT * FROM simulation_cycle WHERE shuttleId = ? ORDER BY \"Index\"",
                 arrayOf(shuttleId),
                 {
                     rs, row -> SimCycleEntity(
@@ -41,9 +41,9 @@ class SimulationPgRepository(val db: JdbcTemplate) : SimulationRepository {
         cycles.forEach {
             db.update(
                     "INSERT INTO simulation_cycle " +
-                            "(shuttleid, driverid, index, latitude, longitude, heading, status) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?::shuttle_status);",
-                    it.shuttleId, it.driverId, it.index, it.latitude, it.longitude, it.heading, it.status
+                            "(shuttleid, driverid, \"Index\", latitude, longitude, heading, status) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?::shuttle_status)",
+                    it.shuttleId, it.driverId, it.index, it.latitude, it.longitude, it.heading, it.status?.toString()
             )
         }
     }
