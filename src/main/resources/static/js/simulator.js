@@ -44,7 +44,7 @@ function SimulatorApp() {
     shuttleName = elements.shuttleSelect.find('option:selected').text();
     shuttleStatus = elements.statusBtns.find('.selected').data('status');
 
-    stayAliveIntervalId = setInterval(stayAlive, 5000);
+    stayAliveIntervalId = setInterval(stayAlive, 3000);
     refreshStatus();
     refreshButtons();
 
@@ -80,7 +80,7 @@ function SimulatorApp() {
         simCursor = 0;
         status = states.simulating;
         simulateCycle();
-        intervalId = setInterval(simulateCycle, 5000);
+        intervalId = setInterval(simulateCycle, 3000);
       } else if (status === states.simulating) {
         stopSimulation();
       }
@@ -101,7 +101,7 @@ function SimulatorApp() {
         log('Recording started...');
         status = states.recording;
         recordCycle();
-        intervalId = setInterval(recordCycle, 5000);
+        intervalId = setInterval(recordCycle, 3000);
       } else if (status === states.recording) {
         log('Recording stopped');
         status = states.idle;

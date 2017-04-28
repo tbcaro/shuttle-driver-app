@@ -54,7 +54,7 @@ function OnAssignmentApp() {
         .catch(function(error) {
           console.log(error);
         });
-    intervalId = setInterval(postActivity, 5000);
+    intervalId = setInterval(postActivity, 3000);
     bindEventHandlers();
   };
 
