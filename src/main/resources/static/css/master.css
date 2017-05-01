@@ -17,3 +17,7 @@ body {
   flex-flow: column;
   align-items: stretch;
 }
+
+.btn {
+  cursor: pointer;
+}

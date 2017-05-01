@@ -26,12 +26,10 @@
             <div>
               <label>Select Shuttle:</label>
             </div>
-            <div class="input-group">
-              <select id="shuttle-select" class="form-control">
-                <option value="0"></option>
-                <option th:each="shuttle : ${shuttleOptions}" th:value="${shuttle.key}" th:text="${shuttle.value}">Invalid Shuttle</option>
-              </select>
-            </div>
+            <select id="shuttle-select" class="form-control">
+              <option value="0"></option>
+              <option th:each="shuttle : ${shuttleOptions}" th:value="${shuttle.key}" th:text="${shuttle.value}">Invalid Shuttle</option>
+            </select>
           </div>
         </div>
         <div class="row">
