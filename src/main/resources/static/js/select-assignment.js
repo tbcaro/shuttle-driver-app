@@ -14,6 +14,7 @@ function SelectAssignmentApp() {
     // TBC : Setup elements
     elements.btnRefresh = $('#btn-refresh');
     elements.assignmentCard = $('#assignment-card');
+    elements.noResultsCard = $('#no-results-card');
     elements.routeNameContainer = $('#route-name-container');
     elements.scheduleCard = $('#schedule-card');
     elements.scheduleCardBody = elements.scheduleCard.find('tbody');
@@ -90,6 +91,13 @@ function SelectAssignmentApp() {
         .then(function(response) {
           console.log(response);
           driverAssignments = response.data;
+          if (driverAssignments.length == 0) {
+            elements.noResultsCard.show();
+            elements.assignmentCard.hide();
+          } else {
+            elements.noResultsCard.hide();
+            elements.assignmentCard.show();
+          }
           checkPageControlsEnabled();
           bindSelectedAssignmentData();
         })

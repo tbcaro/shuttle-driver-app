@@ -117,6 +117,7 @@ function OnAssignmentApp() {
               bindBtnChangeStatusData();
             } else {
               assignment = assignmentData;
+              bindAssignmentData();
             }
 
           })
