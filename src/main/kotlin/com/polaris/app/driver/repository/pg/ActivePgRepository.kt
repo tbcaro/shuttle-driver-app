@@ -20,24 +20,44 @@ import java.time.LocalTime
 @Component
 class ActivePgRepository(val db: JdbcTemplate): ActiveRepository {
     override fun findAssignment(assignmentID: Int): AssignmentEntity {
-        val assignments = db.query(
-                "SELECT * FROM assignment WHERE assignmentid = ? AND isarchived = false",
-                arrayOf(assignmentID),
-                {
-                    resultSet, rowNum -> AssignmentEntity(
-                        resultSet.getInt("assignmentid"),
-                        //resultSet.getInt("serviceid"),
-                        resultSet.getInt("driverid"),
-                        resultSet.getInt("shuttleid"),
-                        resultSet.getInt("routeid"),
-                        resultSet.getTimestamp("starttime").toLocalDateTime().toLocalTime(),
-                        resultSet.getTimestamp("startdate").toLocalDateTime().toLocalDate(),
-                        resultSet.getString("routename"),
-                        status = AssignmentStatus.valueOf(resultSet.getString("status"))
-                    )
-                }
-        )
-        return assignments[0]
+        val rows = db.queryForList(
+                "SELECT * FROM assignment " +
+                        "LEFT OUTER JOIN route ON (route.\"ID\" = assignment.routeid) " +
+                        "WHERE assignmentid = ?;",
+                assignmentID)
+        val assignmentEntities = arrayListOf<AssignmentEntity>()
+        rows.forEach {
+            var routeName: String? = null
+            var routeID: Int? = 0
+            var startTime: LocalTime? = null
+            var startDate: LocalDate? = null
+
+            if (it["Name"] != null) routeName = it["Name"] as String
+            else if (it["routename"] != null) routeName = it["routename"] as String
+            if (it["routeid"] != null) routeID = it["routeid"] as Int
+
+            startTime = (it["starttime"]?.let { it as Time })?.toLocalTime()
+            startDate = (it["startdate"]?.let { it as Date})?.toLocalDate()
+
+            val assignmentID: Int = it["assignmentid"] as Int
+            //val serviceID: Int = it["serviceid"] as Int
+            val driverID: Int = it["driverid"] as Int
+            val shuttleID: Int = it["shuttleid"] as Int
+
+            val assignmentEntity = AssignmentEntity(
+                    it["assignmentid"] as Int,
+                    //it["serviceid"] as Int,
+                    it["driverid"] as Int,
+                    it["shuttleid"] as Int,
+                    routeID,
+                    startTime,
+                    startDate,
+                    routeName,
+                    AssignmentStatus.valueOf(it["status"] as String)
+            )
+            assignmentEntities.add(assignmentEntity)
+        }
+        return assignmentEntities[0]
     }
 
     override fun findAssignmentStops(assignmentID: Int): List<AssignmentStopEntity> {
