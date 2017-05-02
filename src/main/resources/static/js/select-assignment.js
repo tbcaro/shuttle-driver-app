@@ -16,6 +16,7 @@ function SelectAssignmentApp() {
     elements.assignmentCard = $('#assignment-card');
     elements.noResultsCard = $('#no-results-card');
     elements.routeNameContainer = $('#route-name-container');
+    elements.startTimeContainer = $('#start-time-container');
     elements.scheduleCard = $('#schedule-card');
     elements.scheduleCardBody = elements.scheduleCard.find('tbody');
     elements.btnPrev = $('#btn-prev');
@@ -132,6 +133,7 @@ function SelectAssignmentApp() {
       var assignment = driverAssignments[assignmentCursor];
 
       elements.routeNameContainer.html(assignment.routeName);
+      elements.startTimeContainer.html(timeUtils.formatTime(assignment.startTime));
       elements.scheduleCardBody.empty();
 
       var report = assignment.assignmentReport;
