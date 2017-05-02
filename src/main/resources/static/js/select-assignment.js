@@ -83,6 +83,7 @@ function SelectAssignmentApp() {
           })
           .catch(function(error) {
             console.log(error);
+            alert('Post activity failed: ' + error.message);
           });
     });
   };
@@ -104,6 +105,7 @@ function SelectAssignmentApp() {
         })
         .catch(function(error) {
           console.log(error);
+          alert('Failed to fetch all assignments: ' + error.message);
         });
   };
 

@@ -53,6 +53,7 @@ function OnAssignmentApp() {
         })
         .catch(function(error) {
           console.log(error);
+          alert('Fetch active assignment failed: ' + error.message);
         });
     intervalId = setInterval(postActivity, 3000);
     bindEventHandlers();
@@ -123,6 +124,7 @@ function OnAssignmentApp() {
           })
           .catch(function(error) {
             console.log(error);
+            alert('Post activity failed: ' + error.message);
           });
     });
   };
@@ -186,7 +188,7 @@ function OnAssignmentApp() {
       if (shuttleActivity.status == DRIVING) {
         elements.btnEndAssignmentContainer.show();
         elements.btnFinishAssignmentContainer.hide();
-        
+
         var nextStop = assignment.assignmentReport.assignmentStops[stopCursor];
         elements.btnChangeStatus.addClass('btn-warning');
         elements.btnChangeStatus.removeClass('btn-success');

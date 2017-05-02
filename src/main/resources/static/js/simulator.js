@@ -236,6 +236,7 @@ function SimulatorApp() {
         })
         .catch(function(error) {
           console.log(error);
+          alert('Stay alive failed: ' + error.message);
         });
   };
 
