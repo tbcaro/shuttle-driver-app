@@ -85,7 +85,7 @@ class ActiveServiceImpl(val activeRepository: ActiveRepository): ActiveService{
                     startDate = it.startDate,
                     startTime = it.startTime,
                     routeID = it.routeID,
-                    routeName = it.routeName ?: "",
+                    routeName = it.routeName,
                     driverID = it.driverID,
                     shuttleID = it.shuttleID,
                     status = it.status,
