@@ -184,6 +184,9 @@ function OnAssignmentApp() {
       elements.btnChangeStatus.data('nextStatus', DRIVING);
     } else {
       if (shuttleActivity.status == DRIVING) {
+        elements.btnEndAssignmentContainer.show();
+        elements.btnFinishAssignmentContainer.hide();
+        
         var nextStop = assignment.assignmentReport.assignmentStops[stopCursor];
         elements.btnChangeStatus.addClass('btn-warning');
         elements.btnChangeStatus.removeClass('btn-success');
